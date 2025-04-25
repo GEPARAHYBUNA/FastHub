@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste de Envio</title>
+</head>
+<body>
+    <h2>Teste de Cadastro (Mock)</h2>
+    <button id="enviarBtn">Enviar Dados</button>
+
+    <script>
+        document.getElementById('enviarBtn').addEventListener('click', function () {
+            // Dados mockados
+            const postData = {
+                login: "mock@exemplo.com",
+                email: "mock@exemplo.com",
+                password: "123456",
+                role: "CLIENTE",
+                nome: "João",
+                sobrenome: "Silva",
+                documento: "12345678900",
+                cep: "12345-678",
+                endereco: "Rua Exemplo, 123",
+                estado: "SP"
+            };
+
+            console.log("Enviando dados:", postData);
+
+            fetch('http://172.22.109.92:8081/autenticacao/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            })
+            .then(async response => {
+                const contentType = response.headers.get('Content-Type');
+
+                if (!response.ok) {
+                    if (contentType && contentType.includes('application/json')) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.mensagem || 'Erro desconhecido do servidor.');
+                    } else {
+                        const errorText = await response.text();
+                        throw new Error(errorText || 'Erro desconhecido do servidor.');
+                    }
+                }
+
+                const text = await response.text();
+                console.log('Resposta do servidor:', text);
+
+                if (text.trim().toUpperCase() === 'CRIADO') {
+                    alert('✅ Cadastro realizado com sucesso!');
+                } else {
+                    alert('⚠️ Resposta inesperada do servidor: ' + text);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('❌ Erro ao cadastrar: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

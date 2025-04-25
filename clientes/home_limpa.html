@@ -1,0 +1,412 @@
+
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Barra Navegação -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">FastHub</div>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="#" class="nav-link" data-page="home">Serviços Disponíveis</a>
+                <a href="#" class="nav-link" data-page="request">Solicitar Serviço</a>
+                <a href="#" class="nav-link" data-page="myrequests">Minhas Solicitações</a>
+                <a href="#" class="nav-link" data-page="profile">Meu Perfil</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Conteúdo -->
+    <main class="content">
+        <!-- Home Page (Serviços Disponíveis) -->
+        <section id="home" class="page active">
+            <div class="header">
+                <h1 class="title">Serviços Disponíveis</h1>
+                <p class="subtitle">Profissionais qualificados disponíveis em sua região para atender às suas necessidades.</p>
+            </div>
+            
+            <div class="action" style="text-align: center;">
+                <button class="btn" id="requestServiceBtn">
+                    Solicitar um novo serviço
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="grid" id="servicesGrid">
+                <!-- Serviços serão inseridos via JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Soliicitação Serviço -->
+        <section id="request" class="page">
+            <div class="header">
+                <h1 class="title">Solicitar Serviço</h1>
+                <p class="subtitle">Descreva o serviço que você precisa e encontre profissionais qualificados para ajudá-lo.</p>
+            </div>
+            
+            <form id="requestForm" class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Título do Serviço</label>
+                    <input type="text" id="serviceTitle" class="form-input" placeholder="Ex: Instalação de ar-condicionado" required>
+                </div>
+                
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select id="serviceCategory" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="eletrico">Elétrico</option>
+                            <option value="hidraulico">Hidráulico</option>
+                            <option value="ar-condicionado">Ar-Condicionado</option>
+                            <option value="limpeza">Limpeza</option>
+                            <option value="pintura">Pintura</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Urgência</label>
+                        <select id="serviceUrgency" class="form-select" required>
+                            <option value="">Selecione a urgência</option>
+                            <option value="high">Urgente</option>
+                            <option value="medium">Moderado</option>
+                            <option value="low">Planejado</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Descrição do Serviço</label>
+                    <textarea id="serviceDescription" class="form-input text-area" placeholder="Descreva detalhadamente o que você precisa..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Localização</label>
+                    <input type="text" id="serviceLocation" class="form-input" placeholder="Ex: Rua, Bairro, Cidade" required>
+                </div>
+                
+                <button type="submit" class="btn">
+                    Solicitar Serviço
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </section>
+        
+        <!-- MInhas Solicitações -->
+        <section id="myrequests" class="page">
+            <div class="header">
+                <h1 class="title">Minhas Solicitações</h1>
+                <p class="subtitle">Acompanhe o status de suas solicitações e propostas recebidas.</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="active">Solicitações Ativas</div>
+                <div class="tab" data-tab="completed">Serviços Concluídos</div>
+            </div>
+            
+            <div id="activeTab" class="tab-content active">
+                <!-- Solicitações ativas serão inseridas via JavaScript -->
+            </div>
+            
+            <div id="completedTab" class="tab-content">
+                <!-- Serviços concluídos serão inseridos via JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Perfil -->
+        <section id="profile" class="page">
+            <div class="header">
+                <h1 class="title">Meu Perfil</h1>
+                <p class="subtitle">Mantenha suas informações atualizadas para uma melhor experiência.</p>
+            </div>
+            
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <div id="profileImage">R</div>
+                    <label class="avatar-upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        <input type="file" id="avatarInput" style="display: none;" accept="image/*">
+                    </label>
+                </div>
+                <h3 class="profile-name" id="profileNameDisplay">Rafael Souza</h3>
+                <div class="profile-details">
+                    <span id="profileEmailDisplay">rafael.souza@email.com</span>
+                    <span id="profilePhoneDisplay">(11) 99876-5432</span>
+                </div>
+            </div>
+            
+            <form id="profileForm" class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nome Completo</label>
+                    <input type="text" id="profileName" class="form-input" value="Rafael Souza">
+                </div>
+                
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" id="profileEmail" class="form-input" value="rafael.souza@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel" id="profilePhone" class="form-input" value="(11) 99876-5432">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Endereço</label>
+                    <input type="text" id="profileAddress" class="form-input" value="Rua das Flores, 123 - São Paulo, SP">
+                </div>
+                
+                <button type="submit" class="btn">
+                    Salvar Alterações
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Contato do Prestador -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Contato do Prestador</h3>
+                <button class="modal-close" id="contactModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome do Prestador</label>
+                    <p id="providerName" class="form-input" style="background-color: #f9fafb;"></p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telefone para Contato</label>
+                    <p id="providerPhone" class="form-input" style="background-color: #f9fafb;"></p>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">Agora você pode entrar em contato diretamente com o prestador para combinar os detalhes do serviço.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="copyPhoneBtn">
+                    Copiar Telefone
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avaliação -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Avaliar Serviço</h3>
+                <button class="modal-close" id="ratingModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Sua avaliação</label>
+                    <div class="rating" id="ratingStars">
+                        <span class="rating-star" data-rating="1">★</span>
+                        <span class="rating-star" data-rating="2">★</span>
+                        <span class="rating-star" data-rating="3">★</span>
+                        <span class="rating-star" data-rating="4">★</span>
+                        <span class="rating-star" data-rating="5">★</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Comentário (opcional)</label>
+                    <textarea id="ratingComment" class="form-input text-area" placeholder="Compartilhe sua experiência com este serviço..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="submitRatingBtn">
+                    Enviar Avaliação
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Toasts will be added here dynamically -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="copyright">&copy; 2024 FastHub. Todos os direitos reservados.</p>
+    </footer>
+</div>
+<script>
+    // Suponha que este script seja incluído na página do painel (dashboard.html)
+
+    let currentUser = null;
+    let userRequests = [];
+    let availableServices = [];
+    
+    window.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+    
+        fetchUserInfo(token)
+            .then(user => {
+                currentUser = user;
+                updateUserUI();
+                fetchUserRequests(user.id, token);
+                fetchAvailableServices(token);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados do usuário:', error);
+                localStorage.removeItem('authToken');
+                window.location.href = '/login.html';
+            });
+    });
+    
+    function fetchUserInfo(token) {
+        return fetch('http://172.22.109.92:8081/usuario', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Falha ao obter usuário');
+            return res.json();
+        });
+    }
+    
+    function fetchUserRequests(userId, token) {
+        fetch(`http://172.22.109.92:8081/usuarios/${userId}/solicitacoes`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            userRequests = data;
+            generateActiveRequests();
+            generateCompletedRequests();
+        })
+        .catch(err => {
+            console.error('Erro ao buscar solicitações:', err);
+        });
+    }
+    
+    function fetchAvailableServices(token) {
+        fetch('http://172.22.109.92:8081/servicos', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            availableServices = data;
+            generateServiceCards();
+        })
+        .catch(err => {
+            console.error('Erro ao buscar serviços:', err);
+        });
+    }
+    
+    function updateUserUI() {
+        document.getElementById('profileNameDisplay').textContent = currentUser.nome || 'Usuário';
+        document.getElementById('profileEmailDisplay').textContent = currentUser.email || 'email@exemplo.com';
+        document.getElementById('profilePhoneDisplay').textContent = currentUser.telefone || '';
+        document.getElementById('profileImage').textContent = (currentUser.nome?.[0] || 'U').toUpperCase();
+    
+        document.getElementById('profileName').value = currentUser.nome || '';
+        document.getElementById('profileEmail').value = currentUser.email || '';
+        document.getElementById('profilePhone').value = currentUser.telefone || '';
+        document.getElementById('profileAddress').value = currentUser.endereco || '';
+    }
+    
+    function generateActiveRequests() {
+        const container = document.getElementById('activeRequestsContainer');
+        container.innerHTML = '';
+    
+        const activeRequests = userRequests.filter(req => req.status !== 'concluído');
+    
+        if (activeRequests.length === 0) {
+            container.innerHTML = '<p>Nenhuma solicitação ativa encontrada.</p>';
+            return;
+        }
+    
+        activeRequests.forEach(req => {
+            const div = document.createElement('div');
+            div.className = 'request-card';
+            div.innerHTML = `<strong>${req.titulo}</strong><p>${req.descricao}</p><span>Status: ${req.status}</span>`;
+            container.appendChild(div);
+        });
+    }
+    
+    function generateCompletedRequests() {
+        const container = document.getElementById('completedRequestsContainer');
+        container.innerHTML = '';
+    
+        const completedRequests = userRequests.filter(req => req.status === 'concluído');
+    
+        if (completedRequests.length === 0) {
+            container.innerHTML = '<p>Nenhuma solicitação concluída encontrada.</p>';
+            return;
+        }
+    
+        completedRequests.forEach(req => {
+            const div = document.createElement('div');
+            div.className = 'request-card completed';
+            div.innerHTML = `<strong>${req.titulo}</strong><p>${req.descricao}</p><span>Finalizado</span>`;
+            container.appendChild(div);
+        });
+    }
+    
+    function generateServiceCards() {
+        const container = document.getElementById('availableServicesContainer');
+        container.innerHTML = '';
+    
+        if (availableServices.length === 0) {
+            container.innerHTML = '<p>Nenhum serviço disponível no momento.</p>';
+            return;
+        }
+    
+        availableServices.forEach(service => {
+            const div = document.createElement('div');
+            div.className = 'service-card';
+            div.innerHTML = `<h3>${service.nome}</h3><p>${service.descricao}</p>`;
+            container.appendChild(div);
+        });
+    }
+    
+    // Sugestão para logout:
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = '/login.html';
+    });
+</script>    
+</body>
+</html>
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Perfil de Usuários</title>
+    <link rel="stylesheet" href="../perfis_usuario/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciar Perfil de Usuários</h1>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar usuário...">
+            <button>Pesquisar</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Último Acesso</th>
+                    <th>Permissões</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>Ana Souza</td>
+                    <td class="ativo">Ativo</td>
+                    <td>10/03/2025 14:32</td>
+                    <td>
+                        <select>
+                            <option>Usuário</option>
+                            <option>Administrador</option>
+                            <option>Moderador</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="bloquear">Bloquear</button>
+                        <button class="banir">Banir</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>João Pereira</td>
+                    <td class="suspenso">Suspenso</td>
+                    <td>08/03/2025 09:15</td>
+                    <td>
+                        <select disabled>
+                            <option>Usuário</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="desbloquear">Desbloquear</button>
+                        <button class="banir">Banir</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="voltar" onclick="window.location.href='./home_adm.html'">Voltar</button>
+    </div>
+</body>
+</html>
