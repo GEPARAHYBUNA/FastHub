@@ -146,11 +146,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     showFeedback('error', 'Erro no cadastro: ' + data);
                 }
+                
             })
             .catch((error) => {
                 console.error('Erro ao enviar:', error);
                 showFeedback('error', 'Ocorreu um erro ao enviar os dados.');
-            }); 
+            });
+            
     }
 
     nextBtn.addEventListener('click', function (e) {

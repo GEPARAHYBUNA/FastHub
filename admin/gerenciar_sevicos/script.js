@@ -1,3 +1,9 @@
+// script.js
+
+// URL base da API
+const API_BASE_URL = 'http://168.231.92.116:8081';
+const CATEGORIAS_API_URL = `${API_BASE_URL}/administracao/categoria`;
+
 // Funcionalidade para o menu móvel
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
@@ -9,14 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Funcionalidade do formulário e da tabela
+    // Elementos do DOM
     const serviceForm = document.getElementById('serviceForm');
     const serviceList = document.getElementById('serviceList');
+    const categorySelect = document.getElementById('serviceCategory');
     
     // Variável para armazenar o ID do serviço em edição
     let editingId = null;
     
-    // Carregar serviços do localStorage ao iniciar
+    // Carregar categorias e serviços ao iniciar
+    loadCategories();
     loadServices();
     
     // Manipular envio do formulário
@@ -40,147 +48,76 @@ document.addEventListener('DOMContentLoaded', function() {
         serviceForm.reset();
     });
     
-    // Delegação de evento para botões de edição e exclusão
-    serviceList.addEventListener('click', function(e) {
-        // Verificar se o clique foi em um botão de editar
-        if (e.target.closest('.btn-edit')) {
-            const button = e.target.closest('.btn-edit');
-            const id = button.getAttribute('data-id');
-            editService(id);
-        }
-        
-        // Verificar se o clique foi em um botão de excluir
-        if (e.target.closest('.btn-delete')) {
-            const button = e.target.closest('.btn-delete');
-            const id = button.getAttribute('data-id');
-            deleteService(id);
-        }
-    });
-    
-    // Função para adicionar um novo serviço
-    function addService(name, description, category) {
-        // Obter serviços existentes
-        let services = getServices();
-        
-        // Gerar novo ID
-        const newId = services.length > 0 ? Math.max(...services.map(s => s.id)) + 1 : 1;
-        
-        // Adicionar novo serviço
-        services.push({
-            id: newId,
-            name: name,
-            description: description,
-            category: category
-        });
-        
-        // Salvar e atualizar a interface
-        saveServices(services);
-        loadServices();
-    }
-    
-    // Função para atualizar um serviço existente
-    function updateService(id, name, description, category) {
-        // Obter serviços existentes
-        let services = getServices();
-        
-        // Encontrar e atualizar o serviço com o ID correspondente
-        const index = services.findIndex(s => s.id == id);
-        if (index !== -1) {
-            services[index] = {
-                id: parseInt(id),
-                name: name,
-                description: description,
-                category: category
-            };
+    // Função para carregar categorias do backend
+    async function loadCategories() {
+        try {
+            // Primeiro, carregar categorias existentes
+            const response = await fetch(`${CATEGORIAS_API_URL}/listar`);
+            if (!response.ok) throw new Error('Erro ao carregar categorias');
             
-            // Salvar e atualizar a interface
-            saveServices(services);
-            loadServices();
+            const categorias = await response.json();
+            
+            // Limpar e popular o select
+            categorySelect.innerHTML = '<option value="" disabled selected>Selecione uma categoria</option>';
+            
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria.id;
+                option.textContent = categoria.nome;
+                categorySelect.appendChild(option);
+            });
+            
+        } catch (error) {
+            console.error('Erro ao carregar categorias:', error);
+            showError('Erro ao carregar categorias. Tente novamente mais tarde.');
         }
     }
     
-    // Função para editar um serviço (carregar dados no formulário)
-    function editService(id) {
-        // Obter serviços existentes
-        let services = getServices();
-        
-        // Encontrar o serviço com o ID correspondente
-        const service = services.find(s => s.id == id);
-        if (service) {
-            // Preencher o formulário com os dados do serviço
-            document.getElementById('serviceName').value = service.name;
-            document.getElementById('serviceDescription').value = service.description;
-            document.getElementById('serviceCategory').value = service.category;
+    // Função para incluir uma nova categoria
+    async function addCategory(nomeCategoria) {
+        try {
+            const response = await fetch(`${CATEGORIAS_API_URL}/incluir`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome: nomeCategoria })
+            });
             
-            // Definir o ID de edição
-            editingId = id;
+            if (!response.ok) throw new Error('Erro ao incluir categoria');
+            
+            const novaCategoria = await response.json();
+            console.log('Categoria incluída com sucesso:', novaCategoria);
+            
+            // Recarregar categorias para incluir a nova
+            await loadCategories();
+            
+            return novaCategoria;
+            
+        } catch (error) {
+            console.error('Erro ao incluir categoria:', error);
+            throw error;
         }
     }
     
-    // Função para excluir um serviço
-    function deleteService(id) {
-        // Solicitar confirmação
-        if (confirm('Tem certeza que deseja excluir este serviço?')) {
-            // Obter serviços existentes
-            let services = getServices();
+    // Função para carregar serviços (usando localStorage como fallback)
+    async function loadServices() {
+        try {
+            // Aqui você pode implementar a chamada ao backend para carregar serviços
+            // Por enquanto, usando localStorage como exemplo
+            const services = getServices();
             
-            // Filtrar serviços, removendo o que possui o ID correspondente
-            services = services.filter(s => s.id != id);
-            
-            // Salvar e atualizar a interface
-            saveServices(services);
-            loadServices();
-            
-            // Se estiver editando o serviço que foi excluído, limpar o formulário
-            if (editingId == id) {
-                serviceForm.reset();
-                editingId = null;
-            }
-        }
-    }
-    
-    // Função para obter serviços do localStorage
-    function getServices() {
-        const servicesJson = localStorage.getItem('fastHubServices');
-        return servicesJson ? JSON.parse(servicesJson) : [];
-    }
-    
-    // Função para salvar serviços no localStorage
-    function saveServices(services) {
-        localStorage.setItem('fastHubServices', JSON.stringify(services));
-    }
-    
-    // Função para carregar serviços na tabela
-    function loadServices() {
-        // Obter serviços
-        const services = getServices();
-        
-        // Se não houver dados salvos e a tabela estiver vazia (primeira execução),
-        // mantemos os dados de exemplo. Caso contrário, limpamos a tabela.
-        if (services.length > 0 || serviceList.querySelector('tr:not(.example-row)')) {
             // Limpar a tabela
             serviceList.innerHTML = '';
             
             // Adicionar cada serviço à tabela
             services.forEach(service => {
-                // Obter nome da categoria formatado
-                let categoryName;
-                switch (service.category) {
-                    case 'eletrico': categoryName = 'Elétrico'; break;
-                    case 'hidraulico': categoryName = 'Hidráulico'; break;
-                    case 'ar-condicionado': categoryName = 'Ar-Condicionado'; break;
-                    case 'limpeza': categoryName = 'Limpeza'; break;
-                    case 'pintura': categoryName = 'Pintura'; break;
-                    default: categoryName = 'Outro';
-                }
-                
-                // Criar linha da tabela
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${service.id}</td>
                     <td>${service.name}</td>
                     <td>${service.description}</td>
-                    <td>${categoryName}</td>
+                    <td>${getCategoryName(service.category)}</td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn-action btn-edit" data-id="${service.id}">
@@ -200,10 +137,162 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </td>
                 `;
-                
-                // Adicionar à tabela
                 serviceList.appendChild(row);
             });
+            
+        } catch (error) {
+            console.error('Erro ao carregar serviços:', error);
+            showError('Erro ao carregar serviços. Tente novamente mais tarde.');
         }
     }
+    
+    // Função auxiliar para obter o nome da categoria
+    function getCategoryName(categoryId) {
+        const option = categorySelect.querySelector(`option[value="${categoryId}"]`);
+        return option ? option.textContent : categoryId;
+    }
+    
+    // Função para adicionar um novo serviço
+    async function addService(name, description, category) {
+        try {
+            // Aqui você pode implementar a chamada POST para adicionar no backend
+            // Por enquanto, usando localStorage como exemplo
+            let services = getServices();
+            const newId = services.length > 0 ? Math.max(...services.map(s => s.id)) + 1 : 1;
+            
+            services.push({
+                id: newId,
+                name: name,
+                description: description,
+                category: category
+            });
+            
+            saveServices(services);
+            await loadServices();
+            
+            showSuccess('Serviço adicionado com sucesso!');
+            
+        } catch (error) {
+            console.error('Erro ao adicionar serviço:', error);
+            showError('Erro ao adicionar serviço. Tente novamente.');
+        }
+    }
+    
+    // Função para atualizar um serviço existente
+    async function updateService(id, name, description, category) {
+        try {
+            // Aqui você pode implementar a chamada PUT para atualizar no backend
+            // Por enquanto, usando localStorage como exemplo
+            let services = getServices();
+            const index = services.findIndex(s => s.id == id);
+            
+            if (index !== -1) {
+                services[index] = {
+                    id: parseInt(id),
+                    name: name,
+                    description: description,
+                    category: category
+                };
+                
+                saveServices(services);
+                await loadServices();
+                
+                showSuccess('Serviço atualizado com sucesso!');
+            }
+            
+        } catch (error) {
+            console.error('Erro ao atualizar serviço:', error);
+            showError('Erro ao atualizar serviço. Tente novamente.');
+        }
+    }
+    
+    // Funções para manipulação do localStorage (temporário)
+    function getServices() {
+        const servicesJson = localStorage.getItem('fastHubServices');
+        return servicesJson ? JSON.parse(servicesJson) : [];
+    }
+    
+    function saveServices(services) {
+        localStorage.setItem('fastHubServices', JSON.stringify(services));
+    }
+    
+    // Funções para exibir mensagens
+    function showSuccess(message) {
+        alert(message); // Você pode substituir por um toast ou modal mais elegante
+    }
+    
+    function showError(message) {
+        alert(message); // Você pode substituir por um toast ou modal mais elegante
+    }
+    
+    // Delegação de eventos para editar/excluir
+    serviceList.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-edit')) {
+            const button = e.target.closest('.btn-edit');
+            const id = button.getAttribute('data-id');
+            editService(id);
+        }
+        
+        if (e.target.closest('.btn-delete')) {
+            const button = e.target.closest('.btn-delete');
+            const id = button.getAttribute('data-id');
+            if (confirm('Tem certeza que deseja excluir este serviço?')) {
+                deleteService(id);
+            }
+        }
+    });
+    
+    // Função para editar serviço
+    function editService(id) {
+        const services = getServices();
+        const service = services.find(s => s.id == id);
+        
+        if (service) {
+            document.getElementById('serviceName').value = service.name;
+            document.getElementById('serviceDescription').value = service.description;
+            document.getElementById('serviceCategory').value = service.category;
+            editingId = id;
+        }
+    }
+    
+    // Função para excluir serviço
+    async function deleteService(id) {
+        try {
+            // Aqui você pode implementar a chamada DELETE para remover no backend
+            // Por enquanto, usando localStorage como exemplo
+            let services = getServices();
+            services = services.filter(s => s.id != id);
+            
+            saveServices(services);
+            await loadServices();
+            
+            if (editingId == id) {
+                serviceForm.reset();
+                editingId = null;
+            }
+            
+            showSuccess('Serviço excluído com sucesso!');
+            
+        } catch (error) {
+            console.error('Erro ao excluir serviço:', error);
+            showError('Erro ao excluir serviço. Tente novamente.');
+        }
+    }
+    
+    // Exemplo de como chamar a função para incluir uma nova categoria
+    // Você pode chamar isso a partir de um botão ou formulário adicional
+    async function exemploIncluirCategoria() {
+        const nomeCategoria = prompt('Digite o nome da nova categoria:');
+        if (nomeCategoria) {
+            try {
+                await addCategory(nomeCategoria);
+                alert('Categoria adicionada com sucesso!');
+            } catch (error) {
+                alert('Erro ao adicionar categoria: ' + error.message);
+            }
+        }
+    }
+    
+    // Descomente para testar
+    // window.exemploIncluirCategoria = exemploIncluirCategoria;
 });

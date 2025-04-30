@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonLoading(loginBtn, true);
 
         try {
-            const response = await fetch('http://172.22.111.174:8081/autenticacao/login', {
+            const response = await fetch('http://168.231.92.116:8081/autenticacao/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: username, password: password })
@@ -146,29 +146,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            alert(data.rules[0].authority);
-
+            
+            // Armazena os dados no localStorage
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', username);
-           // localStorage.setItem('userType', data.rules[0].authority);
+            localStorage.setItem('id', data.id);
+            
+            // Verifica as roles do usuário
+            const roles = data.rules || [];
+            let userRole = '';
+
+            // Encontra a role principal
+            if (roles.some(role => role.authority === 'ROLE_ADMIN')) {
+                userRole = 'ADMIN';
+            } else if (roles.some(role => role.authority === 'ROLE_PRESTADOR')) {
+                userRole = 'PRESTADOR';
+            } else if (roles.some(role => role.authority === 'ROLE_CLIENTE')) {
+                userRole = 'CLIENTE';
+            } else {
+                throw new Error('Nenhuma role válida encontrada');
+            }
+
+            // Mapeia as roles para as páginas correspondentes (usando caminhos absolutos)
+            const pageMap = {
+                'ADMIN': '/admin/home_adm.html',
+                'PRESTADOR': '/prestador/home_prestador.html',
+                'CLIENTE': '/clientes/home_limpa.html'
+            };
+
+            // Obtém a página de redirecionamento
+            const redirectPage = pageMap[userRole];
+
+            if (!redirectPage) {
+                throw new Error('Página de redirecionamento não encontrada para a role');
+            }
 
             showToast('Login realizado com sucesso!');
 
-           // const pageMap = {
-             //   admin: 'home_admin.html',
-               // cliente: '../clientes/hoe_limpa.html',
-                //prestador: 'home_prestador.html'
-            //};
-            //alert("DATA USER TYPE: "+ data.userType);
-            
-           // const redirect = pageMap[data.userType] || "../clientes/home_limpa.html";
-            const redirect = '../clientes/home_limpa.html';
+            // Redireciona após 1 segundo
             setTimeout(() => {
-                window.location.href = redirect;
+                window.location.href = redirectPage;
             }, 1000);
-
         } catch (err) {
-            showToast('Usuário ou senha incorretos.', 'error');
+            showToast(err.message || 'Usuário ou senha incorretos.', 'error');
             console.error(err);
         } finally {
             setButtonLoading(loginBtn, false);
@@ -188,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonLoading(resetPasswordBtn, true);
 
         try {
-            const response = await fetch('http://172.22.111.174:8081/autenticacao/resetar-senha', {
+            const response = await fetch('http://168.231.92.116:8081/autenticacao/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })

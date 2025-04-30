@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const successOverlay = document.getElementById('successOverlay');
 
     function carregarCategorias() {
-        const apiUrl = "http://172.22.111.174:8081/administracao/categoria/listar";
+        const apiUrl = "http://168.231.92.116:8081/administracao/categoria/listar";
 
         fetch(apiUrl)
             .then(response => {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         postData.role = 'PRESTADOR';
         postData.telefone = document.getElementById("telefone").value.replace(/\D/g, '');
-        fetch('http://172.22.111.174:8081/autenticacao/register', {
+        fetch('http://168.231.92.116:8081/autenticacao/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,18 +146,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log('Resposta do servidor:', data);
                 if (data === 'CRIADO') {
-                    alert('Cadastro realizado com sucesso!');
+                    showFeedback('success', 'Cadastro realizado com sucesso!');
                     form.reset();
                     currentStep = 1;
                     updateUI();
                 } else {
-                    alert('Erro no cadastro: ' + data);
+                    showFeedback('error', 'Erro no cadastro: ' + data);
                 }
             })
             .catch((error) => {
                 console.error('Erro ao enviar:', error);
-                alert('Ocorreu um erro ao enviar os dados.');
-            });
+                showFeedback('error', 'Ocorreu um erro ao enviar os dados.');
+            });            
     }
 
     nextBtn.addEventListener('click', function (e) {
@@ -229,4 +229,27 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     updateUI();
+    
 });
+
+        // Função para mostrar feedback (atualizada)
+        function showFeedback(type, message) {
+            const popup = document.getElementById('feedbackPopup');
+            const messageEl = document.getElementById('feedbackMessage');
+            const iconEl = document.getElementById('feedbackIcon');
+            
+            popup.className = type;
+            messageEl.textContent = message;
+            iconEl.textContent = type === 'success' ? '✓' : '✗';
+            popup.style.display = 'flex';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    window.location.href = '/sistema/login/login.html';
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 5000);
+            }
+        }

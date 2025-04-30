@@ -16,17 +16,11 @@
     <!-- Toasts -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Sucesso -->
-    <div class="success-overlay" id="successOverlay">
-        <div class="success-modal">
-            <div class="success-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
-            <h3 class="success-title">Cadastro Realizado com Sucesso!</h3>
-            <p class="success-message">Seus dados foram cadastrados com sucesso no FastHub.</p>
-            <button class="success-button" onclick="hideSuccess()">Continuar</button>
+    <!-- Popup de Feedback -->
+    <div id="feedbackPopup">
+        <div class="feedback-content">
+            <span id="feedbackIcon"></span>
+            <span id="feedbackMessage"></span>
         </div>
     </div>
 
@@ -181,6 +175,7 @@
                             <label class="form-label">Área de Atuação</label>
                             <select class="form-select" name="categoriaId" required>
                               <option value="" disabled selected>Selecione a Área</option>
+                                <option value="1">Tecnologia</option>
                               <!-- As opções serão preenchidas via JS -->
                             </select>
                           </div>
