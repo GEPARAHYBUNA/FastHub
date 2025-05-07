@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Perfil de Usuários</title>
     <link rel="stylesheet" href="../perfis_usuario/style.css">
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+
+    <script src="../../util/funcoesImportantes.js"></script>
 </head>
 <body>
     <div class="container">
@@ -26,43 +29,96 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>Ana Souza</td>
-                    <td class="ativo">Ativo</td>
-                    <td>10/03/2025 14:32</td>
-                    <td>
-                        <select>
-                            <option>Usuário</option>
-                            <option>Administrador</option>
-                            <option>Moderador</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="bloquear">Bloquear</button>
-                        <button class="banir">Banir</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>002</td>
-                    <td>João Pereira</td>
-                    <td class="suspenso">Suspenso</td>
-                    <td>08/03/2025 09:15</td>
-                    <td>
-                        <select disabled>
-                            <option>Usuário</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="desbloquear">Desbloquear</button>
-                        <button class="banir">Banir</button>
-                    </td>
-                </tr>
+            <tbody id="userTableBody">
             </tbody>
         </table>
 
-        <button class="voltar" onclick="window.location.href='./home_adm.html'">Voltar</button>
+        <button class="voltar" onclick="window.location.href='../home_adm.html'">Voltar</button>
     </div>
+    <script src="../util/funcoesImportantes.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const url = "http://168.231.92.116:8081/autenticacao/api/listaUsuario";
+            const tbody = document.getElementById("userTableBody");
+        
+            fetch(url)
+                .then(response => response.json())
+                .then(users => {
+                    tbody.innerHTML = ""; // Limpa o conteúdo anterior
+        
+                    users.forEach(user => {
+                        const tr = document.createElement("tr");
+        
+                        // Define classe de status
+                        let statusClass = "";
+                        if (user.statusEnum === "ATIVO") statusClass = "ativo";
+                        else if (user.statusEnum === "SUSPENSO") statusClass = "suspenso";
+                        else statusClass = "desconhecido";
+        
+                        // Simula um último acesso
+                        const ultimoAcesso = new Date().toLocaleString("pt-BR");
+        
+                        // Cria options do select de permissões
+                        const permissoes = `
+                            <select ${user.statusEnum !== 'ATIVO' ? "disabled" : ""}>
+                                <option ${user.role === "CLIENTE" ? "selected" : ""}>Usuário</option>
+                                <option ${user.role === "ADMIN" ? "selected" : ""}>Administrador</option>
+                                <option ${user.role === "PRESTADOR" ? "selected" : ""}>Moderador</option>
+                            </select>
+                        `;
+        
+                        // Botões de ação com data-id para referência
+                        let acoes = "";
+                        if (user.statusEnum === "ATIVO") {
+                            acoes = `
+                            
+                                <button class="banir" data-id="${user.id}">Banir</button>
+                            `;
+                        } else {
+                            acoes = `
+                                <button class="banir" data-id="${user.id}">Banir</button>
+                            `;
+                        }
+        
+                        tr.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.nome} ${user.sobrenome}</td>
+                            <td class="${statusClass}">${user.statusEnum}</td>
+                            <td>${ultimoAcesso}</td>
+                            <td>${permissoes}</td>
+                            <td>${acoes}</td>
+                        `;
+        
+                        tbody.appendChild(tr);
+
+                        // Botão de banir
+                        tr.querySelectorAll(".banir").forEach(btn => {
+                            btn.addEventListener("click", function () {
+                                const userId = this.getAttribute("data-id");
+                                fetch(`http://168.231.92.116:8081/administracao/usuario/banir/${userId}`, {
+                                    method: "DELETE"
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        alert("Usuário banido com sucesso!");
+                                        location.reload();
+                                    } else {
+                                        alert("Falha ao banir usuário.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Erro ao banir usuário:", error);
+                                    alert("Erro ao tentar banir usuário.");
+                                });
+                            });
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar usuários:", error);
+                });
+        });
+    </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastHub - Gestão</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
@@ -412,9 +413,9 @@
                 </button>
                 
                 <nav class="navegacao-links" id="navMenu">
-                    <a href="#" class="nav-link">Editar perfil</a>
+                    <a href="editarPerfil/editarPerfil.html" class="nav-link">Editar perfil</a>
                     <a href="#" class="nav-link">Histórico</a>
-                    <a href="./sistema./login.html" class="sair-link">Sair</a>
+                    <a href="../sistema/login/login.html" class="sair-link" onclick="sair()">Sair</a>
                 </nav>
             </div>
         </header>
@@ -428,7 +429,7 @@
             
             <div class="dashboard-grid">
                 <!-- Card 1 - Fluxo de Serviços -->
-                <div class="dashboard-card">
+                <div class="dashboard-card" style="display:none;">
                     <div class="card-header header-fluxo">Gerenciar Fluxo de Serviços</div>
                     <div class="card-content">
                         <div class="card-icon">
@@ -449,7 +450,7 @@
                         </p>
                     </div>
                     <div class="card-action">
-                        <button class="action-btn btn-fluxo" onclick="window.location.href='./fluxo_servicos.html';">
+                        <button class="action-btn btn-fluxo" onclick="window.location.href='fluxo_servicos/fluxo_servicos.html';">
                             Acessar Gerenciamento
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -475,7 +476,7 @@
                         </p>
                     </div>
                     <div class="card-action">
-                        <button class="action-btn btn-perfis" onclick="window.location.href='./perfis_usuarios.html';">
+                        <button class="action-btn btn-perfis" onclick="window.location.href='perfis_usuario/perfis_usuarios.html';">
                             Acessar Gerenciamento
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -500,7 +501,7 @@
                         </p>
                     </div>
                     <div class="card-action">
-                        <button class="action-btn btn-servicos" onclick="window.location.href='gerenciar_servicos.html';">
+                        <button class="action-btn btn-servicos" onclick="window.location.href='gerenciar_sevicos/gerenciar_servicos.html';">
                             Acessar Gerenciamento
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -510,7 +511,7 @@
                 </div>
                 
                 <!-- Card 4 - Relatórios -->
-                <div class="dashboard-card">
+                <div class="dashboard-card" style="display: none;">
                     <div class="card-header header-relatorios">Relatórios</div>
                     <div class="card-content">
                         <div class="card-icon">
@@ -555,6 +556,9 @@
                 });
             }
         });
+
+     
     </script>
+    <script src="../util/funcoesImportantes.js"></script>
 </body>
 </html>

@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log('Dados enviados:', postData);
 
-        fetch('http://172.22.111.174:8081/autenticacao/register', {
+        fetch('http://168.231.92.116:8081/autenticacao/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

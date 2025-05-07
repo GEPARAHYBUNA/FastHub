@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonLoading(loginBtn, true);
 
         try {
-            const response = await fetch('http://172.22.111.174:8081/autenticacao/login', {
+            const response = await fetch('http://168.231.92.116:8081/autenticacao/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: username, password: password })
@@ -146,11 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            alert(data.rules[0].authority);
+          
 
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', username);
-           // localStorage.setItem('userType', data.rules[0].authority);
+            localStorage.setItem('userType', data.rules[0].authority);
+            localStorage.setItem("id", data.id);
 
             showToast('Login realizado com sucesso!');
 
@@ -162,7 +163,25 @@ document.addEventListener('DOMContentLoaded', () => {
             //alert("DATA USER TYPE: "+ data.userType);
             
            // const redirect = pageMap[data.userType] || "../clientes/home_limpa.html";
-            const redirect = '../clientes/home_limpa.html';
+           let redirect = '';
+
+           if (data.rules.length === 1) {
+               const role = data.rules[0].authority;
+               
+               if (role === "ROLE_CLIENTE") {
+                   redirect = '../../clientes/home_limpa.html';
+               } else if (role === "ROLE_PRESTADOR") {
+                   redirect = '../../prestador/home_prestador.html';
+               } else {
+                   redirect = '../../admin/home_adm.html';
+               }
+           } else {
+               redirect = '../../admin/home_adm.html';
+           }
+           
+           // Redireciona o usuário
+           window.location.href = redirect;
+           
             setTimeout(() => {
                 window.location.href = redirect;
             }, 1000);

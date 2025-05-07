@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const successOverlay = document.getElementById('successOverlay');
 
     function carregarCategorias() {
-        const apiUrl = "http://172.22.111.174:8081/administracao/categoria/listar";
+        const apiUrl = "http://168.231.92.116:8081/administracao/categoria/listar";
 
         fetch(apiUrl)
             .then(response => {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         postData.role = 'PRESTADOR';
         postData.telefone = document.getElementById("telefone").value.replace(/\D/g, '');
-        fetch('http://172.22.111.174:8081/autenticacao/register', {
+        fetch('http://168.231.92.116:8081/autenticacao/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
