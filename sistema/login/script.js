@@ -146,44 +146,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            
-            // Armazena os dados no localStorage
+          
+
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', username);
-            localStorage.setItem('id', data.id);
-            
-            // Verifica as roles do usuário
-            const roles = data.rules || [];
-            let userRole = '';
-
-            // Encontra a role principal
-            if (roles.some(role => role.authority === 'ROLE_ADMIN')) {
-                userRole = 'ADMIN';
-            } else if (roles.some(role => role.authority === 'ROLE_PRESTADOR')) {
-                userRole = 'PRESTADOR';
-            } else if (roles.some(role => role.authority === 'ROLE_CLIENTE')) {
-                userRole = 'CLIENTE';
-            } else {
-                throw new Error('Nenhuma role válida encontrada');
-            }
-
-            // Mapeia as roles para as páginas correspondentes (usando caminhos absolutos)
-            const pageMap = {
-                'ADMIN': '/admin/home_adm.html',
-                'PRESTADOR': '/prestador/home_prestador.html',
-                'CLIENTE': '/clientes/home_limpa.html'
-            };
-
-            // Obtém a página de redirecionamento
-            const redirectPage = pageMap[userRole];
-
-            if (!redirectPage) {
-                throw new Error('Página de redirecionamento não encontrada para a role');
-            }
+            localStorage.setItem('userType', data.rules[0].authority);
+            localStorage.setItem("id", data.id);
 
             showToast('Login realizado com sucesso!');
 
-            // Redireciona após 1 segundo
+           // const pageMap = {
+             //   admin: 'home_admin.html',
+               // cliente: '../clientes/hoe_limpa.html',
+                //prestador: 'home_prestador.html'
+            //};
+            //alert("DATA USER TYPE: "+ data.userType);
+            
+           // const redirect = pageMap[data.userType] || "../clientes/home_limpa.html";
+           let redirect = '';
+
+           if (data.rules.length === 1) {
+               const role = data.rules[0].authority;
+               
+               if (role === "ROLE_CLIENTE") {
+                   redirect = '../../clientes/home_limpa.html';
+               } else if (role === "ROLE_PRESTADOR") {
+                   redirect = '../../prestador/home_prestador.html';
+               } else {
+                   redirect = '../../admin/home_adm.html';
+               }
+           } else {
+               redirect = '../../admin/home_adm.html';
+           }
+           
+           // Redireciona o usuário
+           window.location.href = redirect;
+           
             setTimeout(() => {
                 window.location.href = redirectPage;
             }, 1000);

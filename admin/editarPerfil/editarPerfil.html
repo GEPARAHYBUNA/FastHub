@@ -1,0 +1,99 @@
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil</title>
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+    <div class="container">
+        <header class="aba_navegacao">
+            <div class="nav-container">
+                <div class="logo-text">FastHub</div>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                
+                <nav class="navegacao-links" id="navMenu">
+                    <a href="../home_adm.html" class="nav-link">Voltar ao início</a>
+                </nav>
+            </div>
+        </header>
+
+
+    <div class="header">
+        <div><br></div>
+        <div><br></div>
+        <div><br></div>
+        <div><br></div>
+        <h1 class="title">Meu Perfil</h1>
+        <p class="subtitle">Mantenha suas informações atualizadas para uma melhor experiência.</p>
+    </div>
+    
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <div id="profileImage">R</div>
+            <label class="avatar-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                <input type="file" id="avatarInput" style="display: none;" accept="image/*">
+            </label>
+        </div>
+        <h3 class="profile-name" id="profileNameDisplay"></h3>
+        <div class="profile-details">
+            <span id="profileEmailDisplay"></span>
+            <span id="profilePhoneDisplay"></span>
+        </div>
+    </div>
+    
+    <form id="profileForm" class="form-grid">
+        <div class="form-group">
+            <label class="form-label"></label>
+            <input type="text" id="profileName" class="form-input" value="">
+        </div>
+        
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" id="profileEmail" class="form-input" value="">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input type="tel" id="profilePhone" class="form-input" value="">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Endereço</label>
+            <input type="text" id="profileAddress" class="form-input" value="">
+        </div>
+        
+        <button type="submit" class="btn">
+            Salvar Alterações
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        </button>
+    </form>
+
+    </div>
+<script src="script.js"></script>
+<script src="../../util/api/apiGETMeuPerfil_Cliente.js"></script>
+<script src="../../util/api/apiPOSTMeuPerfil_ADM.js"></script>
+
+</body>
+</html>

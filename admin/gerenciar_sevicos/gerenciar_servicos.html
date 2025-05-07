@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastHub - Gerenciamento de Serviços</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../gerenciar_sevicos/style.css">
 </head>
@@ -25,7 +28,7 @@
                 </button>
                 
                 <nav class="navegacao-links" id="navMenu">
-                    <a href="home_adm.html" class="nav-link">Voltar ao início</a>
+                    <a href="../home_adm.html" class="nav-link">Voltar ao início</a>
                 </nav>
             </div>
         </header>
@@ -39,36 +42,35 @@
                 </div>
                 <div class="form-content">
                     <form id="serviceForm">
+                        <!-- Campo  para ID do serviço -->
+                        <input type="hidden" id="servicoId" />
+                    
                         <div class="form-group">
-                            <label for="serviceName">Nome do Serviço</label>
-                            <input type="text" id="serviceName" class="form-control" placeholder="Ex: Instalação Elétrica" required>
+                            <label for="nome">Nome do Serviço</label>
+                            <input type="text" id="nome" class="form-control" required>
                         </div>
-                        
+                    
                         <div class="form-group">
-                            <label for="serviceDescription">Descrição do Serviço</label>
-                            <input type="text" id="serviceDescription" class="form-control" placeholder="Descreva o serviço brevemente" required>
+                            <label for="descricao">Descrição do Serviço</label>
+                            <input type="text" id="descricao" class="form-control" required>
                         </div>
-                        
+                    
                         <div class="form-group">
                             <label for="serviceCategory">Categoria</label>
                             <select id="serviceCategory" class="form-control" required>
                                 <option value="" disabled selected>Selecione uma categoria</option>
-                                <!-- As opções serão preenchidas via JavaScript -->
                             </select>
+                            <input type="hidden" id="categoriaId" name="categoriaId" required>
                         </div>
-                        
+                    
                         <div class="form-actions">
-                            <button type="reset" class="btn btn-secondary">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                    <polyline points="7 3 7 8 15 8"></polyline>
-                                </svg>
-                                Salvar Serviço
+                            <button type="reset" class="btn btn-secondary" onclick="resetForm()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <svg id="submitIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" ...></svg>
+                                <span id="submitText">Salvar Serviço</span>
                             </button>
                         </div>
-                    </form>
+                    </form>                  
                 </div>
             </div>
             
@@ -103,5 +105,8 @@
     </div>
     
     <script src="../gerenciar_sevicos/script.js"></script>
+    <script src="../../util/api/apiPOSTCriarServico.js"></script>
+    <script src="../../util/funcoesImportantes.js"></script>
+  
 </body>
 </html>
