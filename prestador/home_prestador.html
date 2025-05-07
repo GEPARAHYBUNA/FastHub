@@ -81,9 +81,15 @@
                         <textarea class="form-input text-area" placeholder="Conte um pouco sobre sua experiência profissional">Técnico em elétrica e hidráulica com mais de 8 anos de experiência. Especializado em instalações residenciais e pequenos reparos comerciais.</textarea>
                     </div>
                     
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <input type="text" name="estado" class="form-input" placeholder="Estado">
+                    </div>
+            
                     <button type="button" class="btn">Salvar Alterações</button>
                 </form>
             </section>
+            
             
             <!-- HubCash -->
             <section id="hubcash" class="page">
@@ -278,3 +284,28 @@
 
 </body>
 </html>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        const userId = localStorage.getItem('id');
+        if (!userId) return;
+    
+        fetch(`http://168.231.92.116:8081/administracao/meuperfil/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const section = document.querySelector('#profile');
+                if (!section) return;
+    
+                // Preenche cada input com base no atributo name
+                section.querySelector('[name="nomeCompleto"]').value = `${data.nome} ${data.sobrenome}`;
+                section.querySelector('[name="email"]').value = data.email || '';
+                section.querySelector('[name="telefone"]').value = data.telefone || '';
+                section.querySelector('[name="cep"]').value = data.cep || '';
+                section.querySelector('[name="rua"]').value = data.rua || '';
+                section.querySelector('[name="estado"]').value = data.estado || '';
+            })
+            .catch(error => {
+                console.error('Erro ao carregar perfil:', error);
+            });
+    });
+    </script>

@@ -146,18 +146,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log('Resposta do servidor:', data);
                 if (data === 'CRIADO') {
-                    alert('Cadastro realizado com sucesso!');
+                    showFeedback('success', 'Cadastro realizado com sucesso!');
                     form.reset();
                     currentStep = 1;
                     updateUI();
                 } else {
-                    alert('Erro no cadastro: ' + data);
+                    showFeedback('error', 'Erro no cadastro: ' + data);
                 }
             })
             .catch((error) => {
                 console.error('Erro ao enviar:', error);
-                alert('Ocorreu um erro ao enviar os dados.');
-            });
+                showFeedback('error', 'Ocorreu um erro ao enviar os dados.');
+            });            
     }
 
     nextBtn.addEventListener('click', function (e) {
@@ -229,4 +229,27 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     updateUI();
+    
 });
+
+        // Função para mostrar feedback (atualizada)
+        function showFeedback(type, message) {
+            const popup = document.getElementById('feedbackPopup');
+            const messageEl = document.getElementById('feedbackMessage');
+            const iconEl = document.getElementById('feedbackIcon');
+            
+            popup.className = type;
+            messageEl.textContent = message;
+            iconEl.textContent = type === 'success' ? '✓' : '✗';
+            popup.style.display = 'flex';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    window.location.href = '/sistema/login/login.html';
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 5000);
+            }
+        }

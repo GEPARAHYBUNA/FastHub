@@ -183,11 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
            window.location.href = redirect;
            
             setTimeout(() => {
-                window.location.href = redirect;
+                window.location.href = redirectPage;
             }, 1000);
-
         } catch (err) {
-            showToast('Usuário ou senha incorretos.', 'error');
+            showToast(err.message || 'Usuário ou senha incorretos.', 'error');
             console.error(err);
         } finally {
             setButtonLoading(loginBtn, false);
@@ -207,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonLoading(resetPasswordBtn, true);
 
         try {
-            const response = await fetch('http://172.22.111.174:8081/autenticacao/resetar-senha', {
+            const response = await fetch('http://168.231.92.116:8081/autenticacao/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })

@@ -12,14 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Funcionalidade do formulário e da tabela
+    // Elementos do DOM
     const serviceForm = document.getElementById('serviceForm');
     const serviceList = document.getElementById('serviceList');
+    const categorySelect = document.getElementById('serviceCategory');
     
     // Variável para armazenar o ID do serviço em edição
     let editingId = null;
     
-    // Carregar serviços do localStorage ao iniciar
+    // Carregar categorias e serviços ao iniciar
+    loadCategories();
     loadServices();
     
     // Manipular envio do formulário
@@ -102,6 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Erro ao excluir serviço:', error);
                 alert('Erro ao excluir o serviço. Tente novamente.');
             });
+            
+        } catch (error) {
+            console.error('Erro ao carregar serviços:', error);
+            showError('Erro ao carregar serviços. Tente novamente mais tarde.');
         }
     }
     
