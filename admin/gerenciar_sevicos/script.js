@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Função para excluir um serviço
     function deleteService(id) {
+        try{
         if (confirm('Tem certeza que deseja excluir este serviço?')) {
             fetch(`http://168.231.92.116:8081/administracao/servico/excluir/${id}`, {
                 method: 'DELETE'
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Erro ao excluir serviço:', error);
                 alert('Erro ao excluir o serviço. Tente novamente.');
             });
-            
+        }
         } catch (error) {
             console.error('Erro ao carregar serviços:', error);
             showError('Erro ao carregar serviços. Tente novamente mais tarde.');
