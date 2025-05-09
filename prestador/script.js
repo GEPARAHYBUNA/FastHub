@@ -95,8 +95,7 @@ function generateServiceCards(serviceData) {
     button.addEventListener('click', () => {
       const serviceId = parseInt(button.getAttribute('data-service-id'));
       document.getElementById("solicitacaoIdParaProposta").value = serviceId;
-      alert("Valor de ServicoID: "+document.getElementById("solicitacaoIdParaProposta").value);
-      
+
       openProposalModal(serviceId, serviceData); // Passa o serviceData
     });
   });
@@ -116,16 +115,18 @@ function openProposalModal(serviceId, serviceData) {
   selectedService = serviceData.find(service => service.id === serviceId);
   
   if (selectedService) {
+   
     serviceTitle.textContent = selectedService.titulo; // Corrigido para usar 'titulo'
     serviceDescription.textContent = selectedService.descricao; // Corrigido para usar 'descricao'
-    
     proposalModal.classList.add('active');
+    proposalModal.style.display="flex";
+
     
     // Limpa o formulário
     proposalForm.reset();
     
     // Pre-preenche telefone do usuário
-    proposalPhone.value = "(11) 98765-4321";
+    proposalPhone.value = "";
   }
 }
 
@@ -192,7 +193,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem("token");
       
   
-      alert(solicitacaoId);
 
 
 
