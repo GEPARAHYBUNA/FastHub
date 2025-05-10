@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let editingId = null;
     
     // Carregar categorias e serviços ao iniciar
-    loadCategories();
     loadServices();
     
     // Manipular envio do formulário
@@ -105,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Erro ao excluir serviço:', error);
                 alert('Erro ao excluir o serviço. Tente novamente.');
             });
-        }
-        } catch (error) {
+            
+        } }catch (error) {
             console.error('Erro ao carregar serviços:', error);
             showError('Erro ao carregar serviços. Tente novamente mais tarde.');
         }
