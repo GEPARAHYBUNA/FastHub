@@ -75,6 +75,7 @@ const urgencia = document.getElementById("serviceUrgency").value;
 const descricaoServico = document.getElementById("serviceDescription").value;
 
 const token = localStorage.getItem("token");
+
 const idClinte =localStorage.getItem("id");
 
 
@@ -87,9 +88,7 @@ const dados = {
     descricao: descricaoServico
   };
 
-  alert(dados)
 
-  alert("Passou aqui");
   fetch("http://168.231.92.116:8081/cliente/solicitacao/criar", {
     method: "POST",
     headers: {
@@ -106,16 +105,16 @@ const dados = {
     return response.json();
   })
   .then(data => {
-    alert("Sucesso");
     console.log("Sucesso:", data);
+    location.reload();
     // você pode adicionar mais lógica aqui, como redirecionar ou exibir uma mensagem
   })
   .catch(error => {
-    alert("ERRO");
     console.error("Erro ao enviar requisição:", error);
+    location.reload();
   });
 
-  location.reload();
+ 
 }
 
 
