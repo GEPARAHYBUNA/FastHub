@@ -233,7 +233,7 @@
                     <input type="text" id="serviceLocation" class="form-input" placeholder="Ex: Rua, Bairro, Cidade" >
                 </div>
     
-                <button type="submit" class="btn" onclick="enviarSolicitacao()">
+                <button class="btn" onclick="enviarSolicitacao()">
                     Solicitar Serviço
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -252,7 +252,7 @@
             </div>
             
             <div class="tabs">
-                <div class="tab active" data-tab="active">Solicitações Ativas</div>
+                <div class="tab active" data-tab="active" onclick="carregaAtividade()">Solicitações Ativas</div>
                 <div class="tab" data-tab="completed">Serviços Concluídos</div>
             </div>
             
@@ -319,6 +319,53 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <input type="hidden" value="" id="valorDoIdPropostaParaEnviar"/>
+
+    <div class="modal-overlay" id="proposalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Enviar Proposta</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 class="modal-service-title" id="serviceTitle"></h4>
+                <p class="modal-service-desc" id="serviceDescription"></p>
+                
+                <form class="modal-form" id="proposalForm">
+                    <div class="form-group">
+                        <label class="form-label">Valor da Proposta (R$)</label>
+                        <div class="input-icon-wrapper">
+                            <div class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="proposalPrice" class="form-input input-with-icon" placeholder="0,00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Seu telefone para contato</label>
+                        <input type="tel" id="proposalPhone" class="form-input" placeholder="(00) 00000-0000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Mensagem para o cliente</label>
+                        <textarea id="proposalMessage" class="form-input text-area" placeholder="Descreva brevemente como você planeja realizar o serviço..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="submitProposal">Enviar Proposta</button>
+                <input type="hidden" id="solicitacaoIdParaProposta">
+            </div>
+        </div>
+    </div>
+
+
+
+
     <!-- Footer -->
     <footer class="footer">
         <p class="copyright">&copy; 2024 FastHub. Todos os direitos reservados.</p>
@@ -328,6 +375,25 @@
 <script src="../util/funcoesImportantes.js"></script>
 <script src="../util/api/apiGETMeuPerfil_ADM.js"></script>
 <script src="../util/api/apiPOSTMeuPerfil_ADM.js"></script>
+
+<div id="modal-aceite" class="modal-aceite" style="display: none;">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <h2>Aceitar Proposta</h2>
+    <p>Você tem certeza que deseja aceitar esta proposta?</p>
+    <br>
+    <hr>
+    <br>
+    <p id="telefonePrestador" class="telefone-prestador"></p>
+    <br>
+
+    <form id="formAceite">
+      <input type="hidden" id="propostaIdAceite" name="propostaId">
+      <button type="submit" class="btn btn-success">Confirmar Aceite</button>
+    </form>
+  </div>
+</div>
+  
 </body>
 </html>
 

@@ -31,7 +31,12 @@ function carregaAtividade() {
         solicitacoes.forEach(s => {
           const item = document.createElement("div");
           item.classList.add("card", "activeTab", "tab-content", "active");
+          let valorStatus='';
         
+          if(s.status ==="SEM_ATENDIMENTO"){
+            valorStatus = "SEM ATENDIMENTO";
+          }
+
           item.innerHTML = `
           <div class="service-category category-alvenaria">${s.categoria?.descricao}</div>
             <div class="card-content">
@@ -41,7 +46,7 @@ function carregaAtividade() {
               
               <div class="proposta-card"></div>
 
-              <p class="badge"><strong>Status:</strong> ${s.status || "Indefinido"}</p>
+              <p class="badge"><strong>Status:</strong> ${valorStatus || "Indefinido"}</p>
               
             </div>
           `;
@@ -72,6 +77,7 @@ const descricaoServico = document.getElementById("serviceDescription").value;
 const token = localStorage.getItem("token");
 const idClinte =localStorage.getItem("id");
 
+
 const dados = {
     idCliente: idClinte,
     idServico: servicoId,
@@ -81,12 +87,16 @@ const dados = {
     descricao: descricaoServico
   };
 
+  alert(dados)
+
+  alert("Passou aqui");
   fetch("http://168.231.92.116:8081/cliente/solicitacao/criar", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + token
     },
+  
     body: JSON.stringify(dados)
   })
   .then(response => {
@@ -96,19 +106,17 @@ const dados = {
     return response.json();
   })
   .then(data => {
+    alert("Sucesso");
     console.log("Sucesso:", data);
     // você pode adicionar mais lógica aqui, como redirecionar ou exibir uma mensagem
   })
   .catch(error => {
+    alert("ERRO");
     console.error("Erro ao enviar requisição:", error);
   });
 
   location.reload();
 }
-
-
-
-
 
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -247,22 +255,29 @@ function chamarProposta(id, item){
       const container = item.querySelector('.proposta-card');
       propostas.forEach(p => {
         const propostaHTML = `
-          <div class="proposal-card">
-            <div class="proposal-provider">
-              <div class="provider-icon">${(p.prestador?.nome || 'P')[0]}</div>
-              <span>${p.prestador?.nome || 'Prestador desconhecido'} ${p.prestador?.sobrenome || ''}</span>
-            </div>
-            <div class="proposal-price">R$ ${p.valorProposta?.toFixed(2) || "0,00"}</div>
-            <p class="proposal-message">${p.descricao || 'Sem mensagem'}</p>
-            <div class="proposal-actions">
-              <button class="btn btn-sm btn-success accept-proposal-btn"
-                      data-request-id="${p.solicitacaoModel.id}"
-                      data-proposal-id="${p.id}">
-                Aceitar Proposta
-              </button>
-            </div>
-          </div>
-        `;
+  <div class="proposal-card">
+    <div class="proposal-provider">
+      <div class="provider-icon">${(p.prestador?.nome || 'P')[0]}</div>
+      <span>${p.prestador?.nome || 'Prestador desconhecido'} ${p.prestador?.sobrenome || ''}</span>
+    </div>
+    <div class="proposal-price">R$ ${p.valorProposta?.toFixed(2) || "0,00"}</div>
+    <p class="proposal-message">${p.descricao || 'Sem mensagem'}</p>
+    <div class="proposal-actions">
+     <button class="btn btn-sm btn-success accept-proposal-btn"
+        data-request-id="${p.solicitacaoModel.id}"
+        id="${p.id}"
+        data-proposal-id="${p.id}"
+        data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+        onclick="modalParaAbrirAceiteProposta(this)">
+  Aceitar Proposta
+</button>
+
+
+    </div>
+    <div class="phone-display mt-2 text-primary" style="display:none;"></div>
+  </div>
+`;
+
         container.innerHTML += propostaHTML;
       });
     }else{
@@ -280,6 +295,58 @@ function chamarProposta(id, item){
   .catch(error => console.error('Erro ao carregar propostas:', error));
 
 return item;
+
+
+}
+
+
+function modalParaAbrirAceiteProposta(button) {
+  const propostaId = button.getAttribute("data-proposal-id");
+  const telefone = button.getAttribute("data-telefone");
+
+  document.getElementById("valorDoIdPropostaParaEnviar").value=propostaId;
+
+
+  document.getElementById("modal-aceite").style.display = "flex";
+  document.getElementById("propostaIdAceite").value = propostaId;
+
+  // Mostra o telefone no modal
+  const telefoneElement = document.getElementById("telefonePrestador");
+  telefoneElement.textContent = `Telefone do prestador: ${telefone}`;
+}
+
+function fecharModal() {
+  document.getElementById("modal-aceite").style.display = "none";
+  document.getElementById("valorDoIdPropostaParaEnviar").value="";
+
+}
+document.getElementById("formAceite").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const propostaId = document.getElementById("propostaIdAceite").value;
+  const token = localStorage.getItem("token");
+
+  fetch(`http://168.231.92.116:8081/cliente/proposta/aceitar/${propostaId}`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Erro ao aceitar proposta.");
+    return response.json();
+  })
+  .then(data => {
+    alert("Proposta aceita com sucesso!");
+    fecharModal();
+    carregaAtividade();
+  })
+  .catch(error => {
+    console.error(error);
+    alert("Erro ao aceitar a proposta.");
+  });
+});
+
+function aceitarPropostaCliente(){
 
 
 }

@@ -60,9 +60,7 @@ function generateServiceCards(serviceData) {
         <p class="card-description">${service.descricao}</p>
         
         <div class="card-meta"">
-          <div class="card-location">
-            Em breve função disponivel para saber distância
-          </div>
+          
           <div class="card-urgency prazo">
             ${service.prazo}
           </div>
