@@ -28,7 +28,7 @@
                     <a href="#" class="nav-link" data-page="home">Serviços</a>
                     <a href="#" class="nav-link" data-page="profile" id="btnMeuPerfil">Editar perfil</a>
                     <a href="#" class="nav-link" style="display: none;" data-page="hubcash">Comprar HubCash</a>
-                    <a href="#" class="nav-link" data-page="history" id="btnHistorico">Histórico de serviços</a>
+                    <a href="#" class="nav-link" data-page="history" onclick="carregarHistorico()" id="btnHistorico">Histórico de serviços</a>
                     <a href ="#" class="nav-link" onclick="sair()">Sair</a>
                 </nav>
             </div>
@@ -217,7 +217,8 @@
                   <p class="subtitle">Acompanhe todos os serviços que você realizou ou está em andamento.</p>
                 </div>
               
-                <div class="form-grid" id="timelineContainer">
+                <div id="historico-container" class="container mt-4"></div>
+
                   <!-- Os cards serão inseridos aqui -->
                 </div>
               </section>

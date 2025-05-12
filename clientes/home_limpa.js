@@ -30,14 +30,22 @@ function carregaAtividade() {
   
         solicitacoes.forEach(s => {
           const item = document.createElement("div");
+          const espacador = document.createElement("div");
           item.classList.add("card", "activeTab", "tab-content", "active");
           let valorStatus='';
         
+          alert(s.status);
           if(s.status ==="SEM_ATENDIMENTO"){
             valorStatus = "SEM ATENDIMENTO";
+          }else if(s.status==="FINALIZADO"){
+            valorStatus ="FINALIZADO"
+          }else if(s.status==="EM_ATENDIMENTO"){
+            valorStatus = "EM ATENDIMENTO"
           }
 
+
           item.innerHTML = `
+          
           <div class="service-category category-alvenaria">${s.categoria?.descricao}</div>
             <div class="card-content">
              <input type=hidden value="${s.id}" id="solicitacao_${s.id}">
@@ -50,15 +58,23 @@ function carregaAtividade() {
               
             </div>
           `;
+
+
+          espacador.innerHTML=` 
+              <div></div>
+          `;
         
+          
           console.log(s);
           let elemento= document.getElementById("solicitacao_"+s.id);
           console.log(elemento);
           chamarProposta(s.id, item)
-        
+          
           activeTab.appendChild(item);
-        });
+          activeTab.appendChild(espacador);
 
+          
+        });
       })
       .catch(error => {
         console.error("Erro:", error);
@@ -347,5 +363,37 @@ document.getElementById("formAceite").addEventListener("submit", function(e) {
 
 function aceitarPropostaCliente(){
 
+
+  const token = localStorage.getItem('token'); // pega o token do localStorage
+  const idProposta =  document.getElementById("valorDoIdPropostaParaEnviar").value;
+
+  alert(idProposta)
+  
+
+  fetch(`http://168.231.92.116:8081/cliente/proposta/aceitar/${idProposta}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Retorno OK");
+      return response.text(); // ou response.json() se for JSON
+    } else {
+      alert("ERRO");
+      throw new Error('Erro ao aceitar proposta');
+    }
+  })
+  .then(data => {
+    alert('Resposta:', data);
+    alert("Proposta aceita com sucesso!");
+  })
+  .catch(error => {
+    alert('Erro:', error);
+    alert("Ocorreu um erro ao aceitar a proposta.");
+  });
+
+  document.getElementById("valorDoIdPropostaParaEnviar").value="";
 
 }

@@ -21,7 +21,7 @@ async function fetchServices() {
     return;
   }
 
-  const url = `http://168.231.92.116:8081/prestador/solicitacao/lista/${idUsuario}`;
+  const url = `http://168.231.92.116:8081/prestador/solicitacao/lista/semAtendimento/${idUsuario}`;
 
   try {
     const response = await fetch(url, {
@@ -229,5 +229,188 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+  function carregarHistorico() {
+    const id = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+  
+    if (!id || !token) {
+      alert("Usuário não autenticado.");
+      return;
+    }
+  
+    const authorizationHeader = `Bearer ${token}`;
+  
+    fetch(`http://168.231.92.116:8081/prestador/solicitacao/lista/${id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": authorizationHeader,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then(solicitacoes => {
+      const container = document.getElementById("historico-container");
+      container.innerHTML = "";
+  
+      solicitacoes.forEach(s => {
+        const valorStatus = s.status.replace("_", " ") || "Indefinido";
+  
+        const item = document.createElement("div");
+        item.classList.add("card");
+        item.innerHTML = `
+          <div class="service-category category-Hidraulico">${s.categoria?.descricao || ''}</div>
+          <div class="card-content">
+            <input type="hidden" value="${s.id}" id="solicitacao_${s.id}">
+            <h3 class="card-title">${s.titulo} - ${s.servico?.nome || ''}</h3>
+            <p class="card-description">${s.descricao || "Sem descrição"}</p>
+            <div class="proposta-card"></div>
+            <p class="badge"><strong>Status:</strong> ${valorStatus}</p>
+          </div>
+        `;
+  
+        // chama chamarProposta e só adiciona o item se houver proposta
+        chamarProposta(s.id, item).then(temProposta => {
+          if (temProposta) {
+            container.appendChild(item);
+          }
+        }).catch(error => {
+          console.error("Erro ao verificar proposta:", error);
+        });
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar histórico:", error);
+      alert("Erro ao carregar histórico. " + error);
+    });
+  }
+  
+  function chamarProposta(id, item) {
+    return new Promise((resolve, reject) => {
+      const token = localStorage.getItem("token"); 
+      const authorizationHeader = `Bearer ${token}`;
+      const idUsuario = localStorage.getItem("id"); 
+  
+      fetch(`http://168.231.92.116:8081/prestador/proposta/listar/${idUsuario}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": authorizationHeader 
+        }
+      })
+      .then(response => response.json())
+      .then(propostas => {
+        const container = item.querySelector('.proposta-card');
+        container.innerHTML = ""; // limpa container
+  
+        if (Array.isArray(propostas) && propostas.length > 0) {
+          const temFinalizada = propostas.some(p => p.statusPropostaEnum === "FINALIZADA_PRESTADOR");
+  
+          const propostasParaExibir = temFinalizada
+            ? propostas.filter(p => p.statusPropostaEnum === "FINALIZADA_PRESTADOR")
+            : propostas;
+  
+          propostasParaExibir.forEach(p => {
+            let propostaHTML = `
+              <div class="proposal-card">
+                <div class="proposal-provider">
+                  <span>${p.prestador?.nome || 'Prestador desconhecido'} ${p.prestador?.sobrenome || ''}</span>
+                </div>
+                <div class="proposal-price">R$ ${p.valorProposta?.toFixed(2) || "0,00"}</div>
+                <p class="proposal-message">${p.descricao || 'Sem mensagem'}</p>
+            `;
+  
+            if (p.statusPropostaEnum === "ACEITA_CLIENTE") {
+              propostaHTML += `
+                <div class="proposal-actions">
+                  <button class="btn btn-sm btn-success accept-proposal-btn"
+                    data-request-id="${p.solicitacaoModel.id}"
+                    id="${p.id}"
+                    data-proposal-id="${p.id}"
+                    data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+                    onclick="finalizarServico(this)">
+                    Finalizar Proposta E Serviço
+                  </button><br>
+                </div>
+                <div class="phone-display mt-2 text-primary" style="display:none;"></div>
+              </div>`;
+            } else if (p.statusPropostaEnum === "AGUARDANDO_RESPOSTA") {
+              propostaHTML += `
+                <div class="proposal-actions">
+                  <button class="btn btn-sm btn-success accept-proposal-btn"
+                    data-request-id="${p.solicitacaoModel.id}"
+                    id="${p.id}"
+                    data-proposal-id="${p.id}"
+                    data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+                  >
+                    Aguardando uma Resposta
+                  </button><br>
+                </div>
+              </div>`;
+            } else if (p.statusPropostaEnum === "FINALIZADA_PRESTADOR") {
+              propostaHTML += `
+                <div class="proposal-actions">
+                  <button class="btn btn-sm btn-success accept-proposal-btn"
+                    data-request-id="${p.solicitacaoModel.id}"
+                    id="${p.id}"
+                    data-proposal-id="${p.id}"
+                    data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+                  >
+                   Serviço já Realizado
+                  </button><br>
+                </div>
+              </div>`;
+            }
+  
+            container.innerHTML += propostaHTML;
+          });
+  
+          resolve(true); // há propostas para exibir
+        } else {
+          resolve(false); // nenhuma proposta
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao carregar propostas:', error);
+        reject(error);
+      });
+    });
+  }
+  
 
+
+
+
+  function finalizarServico(botao) {
+    const propostaId = botao.getAttribute("data-proposal-id");
+    const token = localStorage.getItem("token");
+  
+    if (!propostaId || !token) {
+      alert("ID da proposta ou token não encontrado.");
+      return;
+    }
+  
+    const url = `http://168.231.92.116:8081/prestador/proposta/finalizar/${propostaId}`;
+  
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(texto => { throw new Error(texto) });
+      }
+      return response.text(); // <- retorna o texto direto
+    })
+    .then(msg => {
+      alert(msg); // Ex: "Proposta finalizada com sucesso pelo prestador."
+      carregarHistorico();
+    })
+    .catch(error => {
+      alert("Erro ao finalizar proposta: " + error.message);
+      carregarHistorico();
+    });
+  }
   
