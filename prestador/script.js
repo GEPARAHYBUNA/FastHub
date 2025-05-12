@@ -198,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function () {
         alert("Preencha todos os campos corretamente e verifique o login.");
         return;
       }
-      alert(descricao);
       const payload = { valor, descricao, solicitacaoId, idPrestador };
   
       try {
@@ -212,16 +211,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
   
         if (response.ok) {
-          alert("Proposta enviada com sucesso!");
+          console.log("Proposta enviada com sucesso!");
           proposalForm.reset();
           proposalModal.style.display = "none";
         } else {
           const errorText = await response.text();
-          alert("Erro ao enviar proposta: " + errorText);
+          console.log("Erro ao enviar proposta: " + errorText);
         }
       } catch (error) {
         console.error("Erro na requisição:", error);
-        alert("Erro de conexão. Tente novamente.");
+        console.log("Erro de conexão. Tente novamente.");
       }
     });
   });
@@ -280,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(error => {
       console.error("Erro ao carregar histórico:", error);
-      alert("Erro ao carregar histórico. " + error);
+      console.log("Erro ao carregar histórico. " + error);
     });
   }
   
@@ -405,11 +404,11 @@ document.addEventListener('DOMContentLoaded', function () {
       return response.text(); // <- retorna o texto direto
     })
     .then(msg => {
-      alert(msg); // Ex: "Proposta finalizada com sucesso pelo prestador."
+      console.log(msg); // Ex: "Proposta finalizada com sucesso pelo prestador."
       carregarHistorico();
     })
     .catch(error => {
-      alert("Erro ao finalizar proposta: " + error.message);
+      console.log("Erro ao finalizar proposta: " + error.message);
       carregarHistorico();
     });
   }

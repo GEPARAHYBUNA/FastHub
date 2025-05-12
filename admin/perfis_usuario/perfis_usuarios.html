@@ -101,15 +101,15 @@
                                 })
                                 .then(response => {
                                     if (response.ok) {
-                                        alert("Usuário banido com sucesso!");
+                                        console.log("Usuário banido com sucesso!");
                                         location.reload();
                                     } else {
-                                        alert("Falha ao banir usuário.");
+                                        console.log("Falha ao banir usuário.");
                                     }
                                 })
                                 .catch(error => {
                                     console.error("Erro ao banir usuário:", error);
-                                    alert("Erro ao tentar banir usuário.");
+                                    console.log("Erro ao tentar banir usuário.");
                                 });
                             });
                         });
