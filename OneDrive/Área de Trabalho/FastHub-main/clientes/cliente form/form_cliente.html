@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastHub - Cadastro de Cliente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../cliente form/style.css">
+</head>
+<body>
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+
+    <!-- Popup de Feedback -->
+    <div id="feedbackPopup">
+        <div class="feedback-content">
+            <span id="feedbackIcon"></span>
+            <span id="feedbackMessage"></span>
+        </div>
+    </div>
+
+    <input type="hidden" class="form-control" value="CLIENTE" name="role" id="role">
+
+
+    <header class="aba_navegacao">
+        <div class="nav-container">
+            <div class="logo-container">
+                <span class="logo-text">FastHub</span>
+            </div>
+            <nav>
+                <a href="../../sistema/home.html" class="nav-link">Voltar ao início</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title">Cadastro de Cliente</h2>
+                <p class="form-subtitle">Preencha o formulário abaixo para se cadastrar no FastHub</p>
+            </div>
+            
+            <div class="form-body">
+                <div class="form-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <span class="step-text">Dados Pessoais</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <span class="step-text">Endereço</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <span class="step-text">Confirmação</span>
+                    </div>
+                </div>
+
+                <form id="registrationForm">
+                    <div class="form-section active" data-step="1">
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Nome</label>
+                                    <input type="text" class="form-control" name="nome" id ="nome" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Sobrenome</label>
+                                    <input type="text" class="form-control" name="sobrenome" id="sobrenome" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">CPF</label>
+                                    <input type="text" class="form-control" name="cpf" id="cpf" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label class="form-label">Senha</label>
+                                <input type="password" class="form-control" name="senha" id="senha" required minlength="6">
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label class="form-label">Confirme a Senha</label>
+                                <input type="password" class="form-control" name="confirmarSenha" id="confirmarSenha" required minlength="6">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section" data-step="2">
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">CEP</label>
+                                    <input type="text" class="form-control" name="cep" id="cep" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Estado</label>
+                                    <select class="form-select" name="estado" id= "estado" required>
+                                        <option value="" selected disabled>Selecione o Estado</option>
+                                        <option value="AC">Acre</option>
+                                        <option value="AL">Alagoas</option>
+                                        <option value="AP">Amapá</option>
+                                        <option value="AM">Amazonas</option>
+                                        <option value="BA">Bahia</option>
+                                        <option value="CE">Ceará</option>
+                                        <option value="DF">Distrito Federal</option>
+                                        <option value="ES">Espírito Santo</option>
+                                        <option value="GO">Goiás</option>
+                                        <option value="MA">Maranhão</option>
+                                        <option value="MT">Mato Grosso</option>
+                                        <option value="MS">Mato Grosso do Sul</option>
+                                        <option value="MG">Minas Gerais</option>
+                                        <option value="PA">Pará</option>
+                                        <option value="PB">Paraíba</option>
+                                        <option value="PR">Paraná</option>
+                                        <option value="PE">Pernambuco</option>
+                                        <option value="PI">Piauí</option>
+                                        <option value="RJ">Rio de Janeiro</option>
+                                        <option value="RN">Rio Grande do Norte</option>
+                                        <option value="RS">Rio Grande do Sul</option>
+                                        <option value="RO">Rondônia</option>
+                                        <option value="RR">Roraima</option>
+                                        <option value="SC">Santa Catarina</option>
+                                        <option value="SP">São Paulo</option>
+                                        <option value="SE">Sergipe</option>
+                                        <option value="TO">Tocantins</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Endereço</label>
+                                    <input type="text" class="form-control" name="endereco" id="endereco"required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Telefone</label>
+                                    <input type="tel" class="form-control" name="telefone" id="telefone" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section" data-step="3">
+                        <div class="form-row">
+                            <div class="form-column">
+                                <h3>Confirme seus dados</h3>
+                                <div id="dadosConfirmacao"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="prevBtn">Voltar</button>
+                        <button type="button" class="btn btn-primary" id="nextBtn">Próximo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 FastHub. Todos os direitos reservados.</p>
+    </footer>
+    <script src="../cliente form/script.js"></script>
+    
+</body>
+</html>

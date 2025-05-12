@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas e Relatórios</title>
+    <link rel="stylesheet" href="styles.css">
+ 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Biblioteca para gráficos -->
+</head>
+<body>
+    <style>
+        /* Configuração Geral */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 1000px;
+}
+
+/* Título */
+h1 {
+    color: #e6007e;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Resumo de Desempenho */
+.resumo {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    color: #333;
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e6007e;
+}
+
+/* Gráficos */
+canvas {
+    max-width: 100%;
+    margin-top: 20px;
+}
+
+/* Botão Voltar */
+.voltar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #e6007e;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.voltar:hover {
+    background-color: #b80063;
+}
+    </style>
+    <div class="container">
+        <h1>Estatísticas e Relatórios</h1>
+
+        <!-- Resumo de Desempenho -->
+        <div class="resumo">
+            <div class="card">
+                <h3>Total de Usuários</h3>
+                <p id="totalUsuarios">1,250</p>
+            </div>
+            <div class="card">
+                <h3>Serviços Solicitados</h3>
+                <p id="servicosSolicitados">320</p>
+            </div>
+            <div class="card">
+                <h3>Taxa de Conclusão</h3>
+                <p id="taxaConclusao">85%</p>
+            </div>
+        </div>
+
+        <!-- Gráfico de Serviços Solicitados -->
+        <h2>Solicitações de Serviços - Últimos 6 Meses</h2>
+        <canvas id="graficoServicos"></canvas>
+
+        <!-- Gráfico de Atividade dos Usuários -->
+        <h2>Atividade de Usuários</h2>
+        <canvas id="graficoUsuarios"></canvas>
+
+        <button class="voltar" onclick="window.location.href='home_adm.html'">Voltar</button>
+    </div>
+
+    <script>
+        // Dados de exemplo para os gráficos
+        const ctx1 = document.getElementById('graficoServicos').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Solicitações de Serviço',
+                    data: [50, 80, 65, 90, 120, 95],
+                    backgroundColor: '#e6007e'
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        const ctx2 = document.getElementById('graficoUsuarios').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                datasets: [{
+                    label: 'Usuários Ativos',
+                    data: [200, 180, 220, 300, 400, 350, 320],
+                    borderColor: '#e6007e',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+    <script src="../util/funcoesImportantes.js"></script>
+</body>
+</html>

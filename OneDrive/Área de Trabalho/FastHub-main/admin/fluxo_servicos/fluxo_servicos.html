@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+    <title>Gerenciar Fluxo de Serviço</title>
+  
+    <link rel="stylesheet" href="../fluxo_servicos/style.css">
+</head>
+    <div class="container">
+        <h1>Gerenciar Fluxo de Serviço</h1>
+
+        <!-- Barra de Pesquisa -->
+        <div class="search-bar">
+            <input type="text" id="buscarServico" placeholder="Buscar serviço...">
+            <button>Pesquisar</button>
+        </div>
+
+        <!-- Tabela de fluxo de serviços -->
+        <h2>Fluxo de Serviços</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Serviço</th>
+                    <th>Cliente</th>
+                    <th>Etapa</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaFluxo">
+                <tr>
+                    <td>101</td>
+                    <td>Suporte Técnico</td>
+                    <td>Maria Souza</td>
+                    <td>Em andamento</td>
+                    <td class="em-andamento">Em progresso</td>
+                    <td>
+                        <button class="proximo">Próxima Etapa</button>
+                        <button class="cancelar">Cancelar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>102</td>
+                    <td>Consultoria Financeira</td>
+                    <td>João Silva</td>
+                    <td>Concluído</td>
+                    <td class="concluido">Finalizado</td>
+                    <td>
+                        <button disabled class="finalizado">Finalizado</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="voltar" onclick="window.location.href='../home_adm.html'">Voltar</button>
+    </div>
+    <script src="../util/funcoesImportantes.js"></script>
+</body>
+</html>
