@@ -1,3 +1,71 @@
+
+function carregaFinalizadas() {
+  const userId = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
+
+  if (!userId || !token) {
+    console.warn("ID do usuário ou token não encontrado no localStorage.");
+    return;
+  }
+
+  fetch(`http://168.231.92.116:8081/cliente/solicitacao/lista/finalizadas/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      if (!response.ok) throw new Error("Erro ao buscar solicitações");
+      return response.json();
+    })
+    .then(solicitacoes => {
+      const completedTab = document.getElementById("completedTab");
+      completedTab.innerHTML = "";
+
+      if (solicitacoes.length === 0) {
+        completedTab.innerHTML = "<p>Nenhuma solicitação finalizada encontrada.</p>";
+        return;
+      }
+
+      solicitacoes.forEach(s => {
+        const item = document.createElement("div");
+        const espacador = document.createElement("div");
+        item.classList.add("card", "completedTab", "tab-content", "active");
+
+        let valorStatus = '';
+        if (s.status === "SEM_ATENDIMENTO") {
+          valorStatus = "SEM ATENDIMENTO";
+        } else if (s.status === "FINALIZADO") {
+          valorStatus = "FINALIZADO";
+        } else if (s.status === "EM_ATENDIMENTO") {
+          valorStatus = "EM ATENDIMENTO";
+        }
+
+        item.innerHTML = `
+          <div class="service-category category-alvenaria">${s.categoria?.descricao}</div>
+          <div class="card-content">
+            <input type="hidden" value="${s.id}" id="solicitacao_${s.id}">
+            <h3 class="card-title">${s.titulo} - ${s.servico?.nome}</h3>
+            <p class="card-description">${s.descricao || "Sem descrição"}</p>
+            <div class="proposta-card"></div>
+            <p class="badge"><strong>Status:</strong> ${valorStatus || "Indefinido"}</p>
+          </div>
+        `;
+
+        espacador.innerHTML = `<div></div>`;
+
+        completedTab.appendChild(item);
+        completedTab.appendChild(espacador);
+      });
+    })
+    .catch(error => {
+      console.error("Erro:", error);
+      document.getElementById("completedTab").innerHTML = "<p>Erro ao carregar solicitações.</p>";
+    });
+}
+
+
 function carregaAtividade() {
    
     const userId = localStorage.getItem("id");
@@ -8,7 +76,7 @@ function carregaAtividade() {
       return;
     }
   
-    fetch(`http://168.231.92.116:8081/cliente/solicitacao/lista/${userId}`, {
+    fetch(`http://168.231.92.116:8081/cliente/solicitacao/lista/ativas/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +145,7 @@ function carregaAtividade() {
       })
       .catch(error => {
         console.error("Erro:", error);
-        document.getElementById("activeTab").innerHTML = "<p>Erro ao carregar solicitações.</p>";
+        document.getElementById("activeTab").innerHTML = "<p>...</p>";
       });
   }
   
