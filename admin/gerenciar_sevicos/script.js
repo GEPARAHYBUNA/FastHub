@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.closest('.btn-edit')) {
             const button = e.target.closest('.btn-edit');
             const id = button.getAttribute('data-id');
-            alert(id);
             editService(id);
         }
         
@@ -97,12 +96,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.text(); // ou .json() se a resposta for JSON
             })
             .then(data => {
-                alert('Excluído com sucesso!');
+                console.log('Excluído com sucesso!');
                 loadServices(); // Recarrega a lista após excluir
             })
             .catch(error => {
                 console.error('Erro ao excluir serviço:', error);
-                alert('Erro ao excluir o serviço. Tente novamente.');
+                console.log('Erro ao excluir o serviço. Tente novamente.');
             });
             
         } }catch (error) {

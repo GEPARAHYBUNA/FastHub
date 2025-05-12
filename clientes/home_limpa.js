@@ -34,7 +34,6 @@ function carregaAtividade() {
           item.classList.add("card", "activeTab", "tab-content", "active");
           let valorStatus='';
         
-          alert(s.status);
           if(s.status ==="SEM_ATENDIMENTO"){
             valorStatus = "SEM ATENDIMENTO";
           }else if(s.status==="FINALIZADO"){
@@ -351,7 +350,6 @@ document.getElementById("formAceite").addEventListener("submit", function(e) {
     return response.json();
   })
   .then(data => {
-    alert("Proposta aceita com sucesso!");
     fecharModal();
     carregaAtividade();
   })
@@ -365,10 +363,7 @@ function aceitarPropostaCliente(){
 
 
   const token = localStorage.getItem('token'); // pega o token do localStorage
-  const idProposta =  document.getElementById("valorDoIdPropostaParaEnviar").value;
-
-  alert(idProposta)
-  
+  const idProposta =  document.getElementById("valorDoIdPropostaParaEnviar").value;  
 
   fetch(`http://168.231.92.116:8081/cliente/proposta/aceitar/${idProposta}`, {
     method: 'POST',
@@ -378,20 +373,16 @@ function aceitarPropostaCliente(){
   })
   .then(response => {
     if (response.ok) {
-      alert("Retorno OK");
       return response.text(); // ou response.json() se for JSON
     } else {
-      alert("ERRO");
       throw new Error('Erro ao aceitar proposta');
     }
   })
   .then(data => {
-    alert('Resposta:', data);
-    alert("Proposta aceita com sucesso!");
+   console.log(data);
   })
   .catch(error => {
-    alert('Erro:', error);
-    alert("Ocorreu um erro ao aceitar a proposta.");
+    console.log(error);
   });
 
   document.getElementById("valorDoIdPropostaParaEnviar").value="";
