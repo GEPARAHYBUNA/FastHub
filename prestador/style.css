@@ -132,3 +132,9 @@
             .nav-link {width: 100%; text-align: center; padding: 1rem 0;}
         }
     
+
+    
+  .proposal-actions {
+    display: flex;
+    gap: 10px; /* espaço entre os botões */
+  }
