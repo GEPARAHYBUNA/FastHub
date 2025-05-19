@@ -33,14 +33,8 @@ function carregaFinalizadas() {
         const espacador = document.createElement("div");
         item.classList.add("card", "completedTab", "tab-content", "active");
 
-        let valorStatus = '';
-        if (s.status === "SEM_ATENDIMENTO") {
-          valorStatus = "SEM ATENDIMENTO";
-        } else if (s.status === "FINALIZADO") {
-          valorStatus = "FINALIZADO";
-        } else if (s.status === "EM_ATENDIMENTO") {
-          valorStatus = "EM ATENDIMENTO";
-        }
+        let valorStatus = s.status.replace(/_/g, " ");
+        
 
         item.innerHTML = `
           <div class="service-category category-alvenaria">${s.categoria?.descricao}</div>
@@ -353,6 +347,7 @@ function chamarProposta(id, item){
         onclick="modalParaAbrirAceiteProposta(this)">
   Aceitar Proposta
 </button>
+
 
 
     </div>

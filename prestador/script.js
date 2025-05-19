@@ -1,3 +1,12 @@
+
+function abreMenu(){
+  const navMenu = document.getElementById('navLinks');
+  if (navMenu) {
+      navMenu.classList.toggle('active');
+  }
+}
+
+
 // Variáveis globais
 let selectedService = null;
 const proposalModal = document.getElementById('proposalModal');
@@ -328,7 +337,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
                     onclick="finalizarServico(this)">
                     Finalizar Proposta E Serviço
-                  </button><br>
+                  </button>
+                  <button class="btn btn-sm btn-success accept-proposal-btn"
+                    data-request-id="${p.solicitacaoModel.id}"
+                    id="${p.id}"
+                    data-proposal-id="${p.id}"
+                    data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+                    onclick="cancelarProposta(this)">
+                    Cancelar Proposta E Serviço
+                  </button>
+                  
+                  <br>
                 </div>
                 <div class="phone-display mt-2 text-primary" style="display:none;"></div>
               </div>`;
@@ -355,6 +374,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
                   >
                    Serviço já Realizado
+                  </button><br>
+                </div>
+              </div>`;
+            }
+
+            else if (p.statusPropostaEnum === "CANCELADA") {
+              propostaHTML += `
+                <div class="proposal-actions">
+                  <button class="btn btn-sm btn-success accept-proposal-btn"
+                    data-request-id="${p.solicitacaoModel.id}"
+                    id="${p.id}"
+                    data-proposal-id="${p.id}"
+                    data-telefone="${p.prestador?.telefone || 'Telefone não disponível'}"
+                  >
+                   Cancelado
                   </button><br>
                 </div>
               </div>`;
@@ -408,8 +442,47 @@ document.addEventListener('DOMContentLoaded', function () {
       carregarHistorico();
     })
     .catch(error => {
-      console.log("Erro ao finalizar proposta: " + error.message);
+      console("Erro ao finalizar proposta: " + error.message);
       carregarHistorico();
     });
   }
   
+
+  function cancelarProposta(botao){
+    const propostaId = botao.getAttribute("data-proposal-id");
+    const token = localStorage.getItem("token");
+  
+    if (!propostaId || !token) {
+      alert("ID da proposta ou token não encontrado.");
+      return;
+    }
+
+    alert(token);
+    alert(propostaId);
+  
+    const url = `http://168.231.92.116:8081/prestador/proposta/cancelar/${propostaId}`;
+
+    alert(url);
+  
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(texto => { throw new Error(texto) });
+      }
+      return response.text(); // <- retorna o texto direto
+    })
+    .then(msg => {
+      console.log(msg); // Ex: "Proposta finalizada com sucesso pelo prestador."
+      carregarHistorico();
+    })
+    .catch(error => {
+      console("Erro ao finalizar proposta: " + error.message);
+      carregarHistorico();
+    });
+  }
