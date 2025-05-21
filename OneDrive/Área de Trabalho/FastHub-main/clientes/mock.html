@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Mock de Envio</title>
+</head>
+<body>
+    <h2>Mock de Envio de Dados</h2>
+    <button id="sendBtn">Enviar Dados</button>
+
+    <script>
+        document.getElementById('sendBtn').addEventListener('click', function () {
+            // Dados mockados
+            const postData = {
+                login: 'usuario@example.com',
+                email: 'usuario@example.com',
+                password: 'senha123',
+                role: 'CLIENTE',
+                nome: 'João',
+                sobrenome: 'Silva',
+                documento: '12345678909',
+                cep: '12345-678',
+                endereco: 'Rua Exemplo, 123',
+                estado: 'SP'
+            };
+
+            console.log('Enviando dados:', postData);
+
+            fetch('http://172.22.109.92:8081/autenticacao/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        console.error('Erro na requisição:', errorData);
+                        throw new Error('Erro ao cadastrar: ' + (errorData.message || 'Erro desconhecido'));
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Sucesso:', data);
+                alert('Cadastro realizado com sucesso!');
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao cadastrar: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

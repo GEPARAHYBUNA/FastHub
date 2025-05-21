@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastHub - Cadastro de Prestador</title>
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Decorativos -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+
+    <!-- Toasts -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Popup de Feedback -->
+    <div id="feedbackPopup">
+        <div class="feedback-content">
+            <span id="feedbackIcon"></span>
+            <span id="feedbackMessage"></span>
+        </div>
+    </div>
+
+    <!-- Modal para Solicitar Serviço -->
+    <div class="modal-overlay" id="serviceRequestModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Solicitar Novo Serviço</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome do Serviço</label>
+                    <input type="text" id="serviceName" class="form-control" placeholder="Ex: Instalação de Painel Solar">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição do Serviço</label>
+                    <textarea id="serviceDescription" class="form-control" rows="4" placeholder="Descreva detalhes sobre o serviço..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeServiceModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="submitServiceRequest()">Enviar Solicitação</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação -->
+    <header class="aba_navegacao">
+        <div class="nav-container">
+            <div class="logo-container">
+                <span class="logo-text">FastHub</span>
+            </div>
+            <nav>
+                <a href="../../sistema/home.html" class="nav-link">Voltar ao início</a>
+            </nav>
+        </div>
+    </header>
+
+    <input type="hidden" id="login" value="">
+        <!-- Formulário de Cadastro -->
+    <main class="main-container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title">Cadastro de Prestador</h2>
+                <p class="form-subtitle">Preencha o formulário abaixo para se cadastrar como prestador no FastHub</p>
+            </div>
+            
+            <input type="hidden" name="nomeCategoria" id="nomeCategoria">
+            <div class="form-body">
+                <!-- Passos -->
+                <div class="form-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <span class="step-text">Dados Pessoais</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <span class="step-text">Serviços</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <span class="step-text">Confirmação</span>
+                    </div>
+                </div>
+
+                <!-- Formulário de Cadastro -->
+                <form id="registrationForm">
+                    <!-- Seção 1 - Dados Pessoais -->
+                    <div class="form-section active" data-step="1">
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Nome</label>
+                                    <input type="text" class="form-control" name="nome" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Sobrenome</label>
+                                    <input type="text" class="form-control" name="sobrenome" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Senha</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Repita</label>
+                                    <input type="password" class="form-control" name="passwordagain" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">CPF / CNPJ</label>
+                                    <input type="text" class="form-control" name="documento" id="documento" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Telefone</label>
+                                    <input type="tel" class="form-control" name="telefone" id="telefone" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">CEP</label>
+                                    <input type="text" class="form-control" name="cep" id="cep" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Endereço</label>
+                                    <input type="text" class="form-control" name="endereco" required>
+                                </div>
+                            </div>
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label class="form-label">Estado</label>
+                                    <select class="form-select" name="estado" required>
+                                        <option value="" selected disabled>Selecione o Estado</option>
+                                        <option value="SP">São Paulo</option>
+                                        <option value="RJ">Rio de Janeiro</option>
+                                        <option value="MG">Minas Gerais</option>
+                                        <option value="BA">Bahia</option>
+                                        <option value="RS">Rio Grande do Sul</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção 2 - Serviços -->
+                    <div class="form-section" data-step="2">
+                        <div class="form-group">
+                            <label class="form-label">Área de Atuação</label>
+                            <select class="form-select" name="categoriaId" required>
+                              <option value="" disabled selected>Selecione a Área</option>
+                                <option value="1">Tecnologia</option>
+                              <!-- As opções serão preenchidas via JS -->
+                            </select>
+                          </div>
+                        
+                       
+                        
+                        <button type="button" class="btn-request-service" style="display: none;" onclick="openServiceModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                            Solicitar Novo Serviço
+                        </button>
+                    </div>
+                    
+                    <!-- Seção 3 - Confirmação -->
+                    <div class="form-section" data-step="3">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Confirme seus dados</h3>
+                        <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;" id="dadosConfirmacao">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <!-- Botões de Ação -->
+                    <div class="form-actions">
+                        <button type="button" id="prevBtn" class="btn btn-secondary">Voltar</button>
+                        <button type="button" id="nextBtn" class="btn btn-primary">Próximo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <p>&copy; 2024 FastHub. Todos os direitos reservados.</p>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="script.js"></script> 
+</body>
+</html>
