@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastHub - Cliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {font-family: 'Kanit', sans-serif; color: #1f2937; background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%); min-height: 100vh; display: flex; flex-direction: column;}
+        h1, h2, h3, h4, h5, h6 {font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em;}
+        .container {display: flex; flex-direction: column; min-height: 100vh;}
+        
+        /* Nav */
+        .navbar {background-color: rgba(255,255,255,0.9); backdrop-filter: blur(10px); position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 50; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 1rem 1.5rem;}
+        .nav-container {max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;}
+        .logo {font-weight: bold; font-size: 1.8rem; color: #db2777; letter-spacing: -0.5px;}
+        .nav-links {display: flex; margin-left: auto; align-items: center; gap: 1rem;}
+        .menu-toggle {display: none; background: none; border: none; color: #db2777; font-size: 1.5rem; cursor: pointer;}
+        .nav-link {background: none; border: none; color: #1f2937; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 0.75rem; border-radius: 0.375rem; position: relative; text-decoration: none;}
+        .nav-link:hover {color: #db2777; background-color: rgba(219,39,119,0.05);}
+        .nav-link::after {content: ''; position: absolute; left: 0.75rem; right: 0.75rem; bottom: 0.25rem; height: 2px; background-color: #db2777; transform: scaleX(0); transition: transform 0.3s ease;}
+        .nav-link:hover::after {transform: scaleX(1);}
+        
+        /* Main */
+        .content {flex: 1; padding-top: 6rem; padding-bottom: 2rem; width: 100%; max-width: 1280px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem;}
+        .page {display: none;}
+        .page.active {display: block; animation: fadeIn 0.5s ease-out forwards;}
+        .header {margin-bottom: 2rem; text-align: center;}
+        .title {font-size: 2.5rem; color: #111827; margin-bottom: 0.75rem; position: relative; display: inline-block; padding-bottom: 0.5rem;}
+        .title::after {content: ''; position: absolute; bottom: 0; left: 10%; right: 10%; height: 3px; background: linear-gradient(to right, #db2777, #f472b6); border-radius: 1.5px;}
+        .subtitle {color: #6b7280; font-size: 1.125rem; max-width: 600px; margin: 0 auto;}
+        
+        /* Cards */
+        .grid {display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.5rem;}
+        .card {background-color: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: all 0.3s ease; border: 1px solid rgba(219,39,119,0.1); display: flex; flex-direction: column; animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(10px);}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);}
+        
+        /* Serviço Cards e Elemtnos */
+        .service-category {padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: white;}
+        .category-eletrico {background: linear-gradient(90deg, #db2777, #ec4899);}
+        .category-hidraulico {background: linear-gradient(90deg, #0ea5e9, #38bdf8);}
+        .category-ar-condicionado {background: linear-gradient(90deg, #10b981, #34d399);}
+        .category-limpeza {background: linear-gradient(90deg, #8b5cf6, #a78bfa);}
+        .category-pintura {background: linear-gradient(90deg, #f59e0b, #fbbf24);}
+        .card-content {padding: 1.5rem; flex: 1; display: flex; flex-direction: column;}
+        .card-title {font-size: 1.375rem; font-weight: 600; color: #111827; margin-bottom: 0.75rem; line-height: 1.2;}
+        .card-description {color: #4b5563; font-size: 0.9375rem; margin-bottom: 1.25rem; line-height: 1.5; flex: 1;}
+        .card-meta {display: flex; justify-content: space-between; padding-top: 1rem; margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280;}
+        .urgency-high {color: #ef4444;}
+        .urgency-medium {color: #f59e0b;}
+        .urgency-low {color: #10b981;}
+        
+        /* Proporção Cards */
+        .proposal-card {border-left: 4px solid #10b981; padding: 1rem; margin-bottom: 1rem;}
+        .proposal-provider {font-weight: 500; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;}
+        .provider-icon {width: 2rem; height: 2rem; background-color: #db2777; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;}
+        .proposal-price {font-size: 1.25rem; font-weight: 600; color: #db2777; margin-bottom: 0.5rem;}
+        .proposal-message {color: #4b5563; font-size: 0.9375rem; margin-bottom: 1rem; line-height: 1.5;}
+        .proposal-actions {display: flex; gap: 0.75rem;}
+        
+        /* Ação do Botão */
+        .action {padding: 0.75rem 1.5rem 1.5rem; text-align: center;}
+        .btn {padding: 0.75rem 1.25rem; border-radius: 0.5rem; border: none; background-color: #db2777; color: white; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(219,39,119,0.2);}
+        .btn:hover {background-color: #be185d; transform: translateY(-2px); box-shadow: 0 6px 15px -3px rgba(219,39,119,0.3);}
+        .btn:active {transform: translateY(0); box-shadow: 0 2px 4px -1px rgba(219,39,119,0.2);}
+        .btn-sm {padding: 0.5rem 1rem; font-size: 0.875rem;}
+        .btn-outline {background-color: transparent; border: 1px solid #db2777; color: #db2777;}
+        .btn-outline:hover {background-color: rgba(219,39,119,0.05); color: #be185d; border-color: #be185d;}
+        .btn-secondary {background-color: #6b7280; color: white;}
+        .btn-secondary:hover {background-color: #4b5563;}
+        .btn-success {background-color: #10b981; color: white;}
+        .btn-success:hover {background-color: #059669;}
+        
+        /* Elementos form */
+        .form-grid {display: grid; gap: 1.5rem; max-width: 600px; margin: 0 auto;}
+        .form-row {display: grid; grid-template-columns: 1fr;}
+        .form-row.cols-2 {grid-template-columns: 1fr 1fr; gap: 1rem;}
+        .form-group {display: flex; flex-direction: column; gap: 0.5rem;}
+        .form-label {font-weight: 500; color: #374151;}
+        .form-input {padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit; font-size: 1rem; transition: border-color 0.2s ease;}
+        .form-input:focus {outline: none; border-color: #db2777; box-shadow: 0 0 0 2px rgba(219,39,119,0.1);}
+        .form-select {padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit; font-size: 1rem; transition: border-color 0.2s ease; background-color: white;}
+        .text-area {min-height: 100px; resize: vertical;}
+        
+        /* Perfil Elementos */
+        .profile-header {display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;}
+        .profile-avatar {width: 100px; height: 100px; border-radius: 50%; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #9ca3af; margin-bottom: 1rem; position: relative; overflow: hidden;}
+        .profile-avatar img {width: 100%; height: 100%; object-fit: cover;}
+        .avatar-upload {position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; cursor: pointer;}
+        .avatar-upload:hover {opacity: 1;}
+        .avatar-upload svg {color: white;}
+        .profile-name {font-size: 1.5rem; font-weight: 600; color: #111827; margin-bottom: 0.25rem;}
+        .profile-details {display: flex; flex-direction: column; align-items: center; color: #6b7280; font-size: 0.875rem;}
+        
+        /* Modal */
+        .modal-overlay {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 1rem;}
+        .modal-overlay.active {display: flex; animation: fadeIn 0.3s ease-out;}
+        .modal {background-color: white; border-radius: 0.75rem; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);}
+        .modal-header {display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid #f3f4f6;}
+        .modal-title {font-size: 1.25rem; font-weight: 600; color: #111827;}
+        .modal-close {background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 1.25rem; line-height: 1; transition: color 0.2s ease;}
+        .modal-close:hover {color: #111827;}
+        .modal-body {padding: 1.5rem;}
+        .modal-footer {padding: 1rem 1.5rem 1.5rem; border-top: 1px solid #f3f4f6; display: flex; justify-content: flex-end; gap: 0.75rem;}
+        
+        /* Rating */
+        .rating {display: flex; gap: 0.25rem;}
+        .rating-star {color: #d1d5db; cursor: pointer; transition: color 0.2s ease;}
+        .rating-star.active, .rating-star:hover {color: #f59e0b;}
+        
+        /* Notificações */
+        .toast-container {position: fixed; bottom: 1rem; right: 1rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem; max-width: 350px;}
+        .toast {background-color: white; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 0.75rem; animation: slideIn 0.3s ease-out; transform: translateX(100%); border-left: 4px solid #10b981;}
+        .toast-icon {color: #10b981; display: flex; align-items: center; justify-content: center;}
+        .toast-content {flex: 1;}
+        .toast-title {font-weight: 600; color: #111827; font-size: 0.9375rem; margin-bottom: 0.25rem;}
+        .toast-message {color: #6b7280; font-size: 0.875rem;}
+        
+        /* Tab */
+        .tabs {display: flex; border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem;}
+        .tab {padding: 0.75rem 1.25rem; color: #6b7280; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s ease;}
+        .tab:hover {color: #111827;}
+        .tab.active {color: #db2777; border-color: #db2777;}
+        .tab-content {display: none;}
+        .tab-content.active {display: block;}
+
+        </style>
+<head>
+    <meta charset="UTF-8">
+    <title>FastHub - Cliente</title>
+    <link rel="icon" type="image/png" href="../imagens/logo.png">  
+    <link rel="stylesheet" href="styles.css">
+   
+  </head>
+<body>
+<div class="container">
+    <!-- Barra Navegação -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">FastHub</div>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="#" class="nav-link" data-page="home">Serviços Disponíveis</a>
+                <a href="#" class="nav-link" data-page="request">Solicitar Serviço</a>
+                <a href="#" class="nav-link" data-page="myrequests" onclick="carregaAtividade()">Minhas Solicitações</a>
+                <a href="#" class="nav-link" id="btnMeuPerfil" data-page="profile">Meu Perfil</a>
+                <a href="#" class="nav-link" onclick="sair()">Sair</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Conteúdo -->
+    <main class="content">
+        <!-- Home Page (Serviços Disponíveis) -->
+        <section id="home" class="page active">
+            <div class="header">
+                <h1 class="title">Serviços Disponíveis</h1>
+                <p class="subtitle">Profissionais qualificados disponíveis em sua região para atender às suas necessidades.</p>
+            </div>
+    
+            <div class="action" style="text-align: center; display: none;">
+                <button class="btn" id="requestServiceBtn">
+                    Solicitar um novo serviço
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+    
+            <div class="grid" id="servicesGrid">
+                <!-- Serviços serão inseridos via JavaScript -->
+            </div>
+        </section>
+   
+  
+
+        <!-- Solicitação Serviço -->
+        <section id="request" class="page">
+            <div class="header">
+                <h1 class="title">Solicitar Serviço</h1>
+                <p class="subtitle">Descreva o serviço que você precisa e encontre profissionais qualificados para ajudá-lo.</p>
+            </div>
+    
+            <form id="requestForm" class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Título do Serviço</label>
+                    <input type="text" id="serviceTitle" class="form-input" placeholder="Ex: Instalação de ar-condicionado" required>
+                </div>
+    
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select id="serviceCategory" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="serviceTypeGroup">
+                        <label class="form-label">Tipo de Serviço</label>
+                        <select id="serviceType" class="form-select">
+                            <option value="">Selecione um tipo de serviço</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label class="form-label">Urgência</label>
+                        <select id="serviceUrgency" class="form-select" required>
+                            <option value="">Selecione a urgência</option>
+                            <option value="urgente">Urgente</option>
+                            <option value="moderado">Moderado</option>
+                            <option value="planejado">Planejado</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label class="form-label">Descrição do Serviço</label>
+                    <textarea id="serviceDescription" class="form-input text-area" placeholder="Descreva detalhadamente o que você precisa..." required></textarea>
+                </div>
+    
+                <div class="form-group" style="display: none;">
+                    <label class="form-label">Localização</label>
+                    <input type="text" id="serviceLocation" class="form-input" placeholder="Ex: Rua, Bairro, Cidade" >
+                </div>
+    
+                <button class="btn" onclick="enviarSolicitacao()">
+                    Solicitar Serviço
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </section>
+   
+         
+        <!-- MInhas Solicitações -->
+        <section id="myrequests" class="page">
+            <div class="header">
+                <h1 class="title">Minhas Solicitações</h1>
+                <p class="subtitle">Acompanhe o status de suas solicitações e propostas recebidas.</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="active" onclick="carregaAtividade()">Solicitações Ativas</div>
+                <div class="tab" data-tab="completed" onclick="carregaFinalizadas()">Serviços Concluídos</div>
+            </div>
+            
+            <div id="activeTab" class="tab-content active">
+                <!-- Solicitações ativas serão inseridas via JavaScript -->
+            </div>
+            
+            <div id="completedTab" class="tab-content">
+                <!-- Serviços concluídos serão inseridos via JavaScript -->
+            </div>
+        </section>
+        
+ <!-- Perfil -->
+<section id="profile" class="page">
+    <div class="header">
+        <h1 class="title">Meu Perfil</h1>
+        <p class="subtitle">Mantenha suas informações atualizadas para uma melhor experiência.</p>
+    </div>
+    
+    <div class="profile-header" style="display: none;">
+        <h3 class="profile-name" id="profileNameDisplay"></h3>
+        <div class="profile-details">
+            <span id="profileEmailDisplay"></span>
+            <span id="profilePhoneDisplay"></span>
+        </div>
+    </div>
+    
+    <form id="profileForm" class="form-grid">
+        <div class="form-group">
+            <label class="form-label">Nome Completo</label>
+            <input type="text" id="profileName" class="form-input" value="">
+        </div>
+        
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" id="profileEmail" class="form-input" value="">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input type="tel" id="profilePhone" class="form-input" value="">
+            </div>
+        </div>
+        
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label">Endereço</label>
+                <input type="text" id="profileAddress" class="form-input" value="">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Número</label>
+                <input type="text" id="profileNumber" class="form-input" value="">
+            </div>
+        </div>
+        
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label">CEP</label>
+                <input type="text" id="profileCEP" class="form-input" value="">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Estado</label>
+                <input type="text" id="profileState" class="form-input" value="">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">
+            Salvar Alterações
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        </button>
+    </form>
+</section>
+
+
+
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <input type="hidden" value="" id="valorDoIdPropostaParaEnviar"/>
+
+    <div class="modal-overlay" id="proposalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Enviar Proposta</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 class="modal-service-title" id="serviceTitle"></h4>
+                <p class="modal-service-desc" id="serviceDescription"></p>
+                
+                <form class="modal-form" id="proposalForm">
+                    <div class="form-group">
+                        <label class="form-label">Valor da Proposta (R$)</label>
+                        <div class="input-icon-wrapper">
+                            <div class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="proposalPrice" class="form-input input-with-icon" placeholder="0,00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Seu telefone para contato</label>
+                        <input type="tel" id="proposalPhone" class="form-input" placeholder="(00) 00000-0000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Mensagem para o cliente</label>
+                        <textarea id="proposalMessage" class="form-input text-area" placeholder="Descreva brevemente como você planeja realizar o serviço..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="submitProposal">Enviar Proposta</button>
+                <input type="hidden" id="solicitacaoIdParaProposta">
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="copyright">&copy; 2024 FastHub. Todos os direitos reservados.</p>
+    </footer>
+</div>
+<script src="home_limpa.js"></script>    
+<script src="../util/funcoesImportantes.js"></script>
+<script src="../util/api/apiGETMeuPerfil_ADM.js"></script>
+<script src="../util/api/apiPOSTMeuPerfil_ADM.js"></script>
+
+<div id="modal-aceite" class="modal-aceite" style="display: none;">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <h2>Aceitar Proposta</h2>
+    <p>Você tem certeza que deseja aceitar esta proposta?</p>
+    <br>
+    <hr>
+    <br>
+    <p id="telefonePrestador" class="telefone-prestador"></p>
+    <br>
+
+    <form id="formAceite">
+      <input type="hidden" id="propostaIdAceite" name="propostaId">
+      <button onclick="aceitarPropostaCliente()" class="btn btn-success">Confirmar Aceite</button>
+    </form>
+  </div>
+</div>
+  
+</body>
+</html>
+
+<script>
+// Função para atualizar a interface com os dados do usuário
+function updateProfileUI() {
+    if (!currentUser) return;
+    
+    // Preencher os campos do formulário
+    document.getElementById('profileNome').value = currentUser.nome || '';
+    document.getElementById('profileSobrenome').value = currentUser.sobrenome || '';
+    document.getElementById('profileEmail').value = currentUser.email || '';
+    document.getElementById('profilePhone').value = currentUser.telefone || '';
+    document.getElementById('profileCep').value = currentUser.cep || '';
+    document.getElementById('profileRua').value = currentUser.rua || '';
+    document.getElementById('profileEstado').value = currentUser.estado || '';
+    
+    // Atualizar a exibição do perfil
+    document.getElementById('profileNameDisplay').textContent = `${currentUser.nome || ''} ${currentUser.sobrenome || ''}`.trim() || 'Usuário';
+    document.getElementById('profileEmailDisplay').textContent = currentUser.email || 'Não informado';
+    document.getElementById('profilePhoneDisplay').textContent = currentUser.telefone || 'Não informado';
+    
+    // Atualizar a inicial do avatar
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage && currentUser.nome) {
+        profileImage.textContent = currentUser.nome.charAt(0).toUpperCase();
+    }
+}
+
+// Função para salvar alterações do perfil
+async function saveProfileChanges(event) {
+    event.preventDefault();
+    
+    try {
+        showToast('Salvando alterações...');
+        
+        // Obter o ID do usuário logado
+        const userId = obterIdUsuarioLogado();
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            throw new Error('Usuário não autenticado');
+        }
+        
+        // Preparar os dados para enviar
+        const dadosPerfil = {
+            nome: document.getElementById('profileNome').value,
+            sobrenome: document.getElementById('profileSobrenome').value,
+            email: document.getElementById('profileEmail').value,
+            telefone: document.getElementById('profilePhone').value,
+            cep: document.getElementById('profileCep').value,
+            rua: document.getElementById('profileRua').value,
+            estado: document.getElementById('profileEstado').value,
+            categoriaId: currentUser?.categoriaId || 0
+        };
+        
+        // Chamada à API para atualizar o perfil
+        const response = await fetch(`http://168.231.92.116:8081/cliente/meuperfil/{id}`, {
+            method: 'G',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dadosPerfil)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao salvar perfil');
+        }
+        
+        // Atualizar os dados locais e a interface
+        currentUser = await response.json();
+        updateProfileUI();
+        showToast('Perfil atualizado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao salvar perfil:', error);
+        showToast(error.message || 'Erro ao salvar perfil', 'error');
+    }
+}
+
+// Função para obter o ID do usuário logado
+function obterIdUsuarioLogado() {
+    return 17 // ID do usuário logado (simulado)
+}
+
+// Função principal de navegação
+function navigateTo(pageId) {
+    // Esconde todas as páginas
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    // Mostra a página selecionada
+    const page = document.getElementById(pageId);
+    if (page) {
+        page.classList.add('active');
+    }
+    
+    // Fecha o menu mobile se estiver aberto
+    const navLinks = document.getElementById('navLinks');
+    if(navLinks && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+    }
+    
+    // Carrega dados específicos para cada página
+    switch(pageId) {
+        case 'profile':
+            loadUserProfile();
+            break;
+        case 'myrequests':
+            loadUserRequests();
+            break;
+        case 'home':
+            loadServices();
+            break;
+    }
+}
+
+// Configura todos os event listeners
+function setupEventListeners() {
+    // Navegação principal
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            navigateTo(pageId);
+        });
+    });
+    
+    // Botão de solicitar serviço
+    const requestBtn = document.getElementById('requestServiceBtn');
+    if (requestBtn) {
+        requestBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo('request');
+        });
+    }
+    
+    // Menu mobile
+    const menuToggle = document.getElementById('menuToggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            const navLinks = document.getElementById('navLinks');
+            if (navLinks) {
+                navLinks.classList.toggle('active');
+            }
+        });
+    }
+    
+    // Tabs de solicitações
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Remove a classe active de todas as tabs
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // Adiciona a classe active apenas na tab clicada
+            this.classList.add('active');
+            
+            // Esconde todos os conteúdos de tab
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Mostra o conteúdo da tab selecionada
+            const tabContent = document.getElementById(`${tabId}Tab`);
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
+        });
+    });
+    
+    // Formulário de perfil
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', saveProfileChanges);
+    }
+    
+    // Formulário de solicitação
+    const requestForm = document.getElementById('requestForm');
+    if (requestForm) {
+        requestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitServiceRequest();
+        });
+    }
+    
+    // Upload de avatar
+    const avatarInput = document.getElementById('avatarInput');
+    if (avatarInput) {
+        avatarInput.addEventListener('change', handleAvatarUpload);
+    }
+}
+
+function handleAvatarUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const profileImage = document.getElementById('profileImage');
+            profileImage.innerHTML = `<img src="${e.target.result}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">`;
+        };
+        reader.readAsDataURL(file);
+        showToast('Foto de perfil atualizada com sucesso!');
+    }
+}
+
+function loadUserRequests() {
+    showToast('Carregando solicitações...');
+    // Implemente a chamada real à API para buscar as solicitações do usuário
+
+}
+
+function renderRequests() {
+    const activeContainer = document.getElementById('activeTab');
+    const completedContainer = document.getElementById('completedTab');
+    
+    if (activeContainer) {
+        activeContainer.innerHTML = userRequests
+            .filter(req => req.status !== 'concluído')
+            .map(req => `
+                <div class="card">
+                    <h4>${req.titulo}</h4>
+                    <p>${req.descricao}</p>
+                    <span class="badge">${req.status}</span>
+                </div>
+            `).join('') || '<p>Nenhuma solicitação ativa</p>';
+    }
+    
+    if (completedContainer) {
+        completedContainer.innerHTML = userRequests
+            .filter(req => req.status === 'concluído')
+            .map(req => `
+                <div class="card">
+                    <h4>${req.titulo}</h4>
+                    <p>${req.descricao}</p>
+                    <span class="badge completed">${req.status}</span>
+                </div>
+            `).join('') || '<p>Nenhuma solicitação concluída</p>';
+    }
+}
+
+function loadServices() {
+    showToast('Carregando serviços...');
+    // Implemente a chamada real à API para buscar os serviços disponíveis
+}
+
+function renderServices() {
+    const grid = document.getElementById('servicesGrid');
+    if (grid) {
+        grid.innerHTML = availableServices
+            .map(service => `
+                <div class="card">
+                    <h3>${service.nome}</h3>
+                    <p>${service.descricao}</p>
+                    <span class="category">${service.categoria}</span>
+                </div>
+            `).join('') || '<p>Nenhum serviço disponível</p>';
+    }
+}
+
+function submitServiceRequest() {
+    const title = document.getElementById('serviceTitle').value;
+    showToast(`Solicitação "${title}" enviada com sucesso!`);
+    navigateTo('myrequests');
+}
+
+// Inicialização quando a página carrega
+document.addEventListener('DOMContentLoaded', () => {
+    // Configura os listeners
+    setupEventListeners();
+    
+    // Carrega a página inicial
+    navigateTo('home');
+});
+</script>
+</body>
+</html>

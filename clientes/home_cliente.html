@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastHub - Cliente</title>
+    <link rel="icon" type="image/png" href="../imagens/logo.png">  
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   
+
+</head>
+<body>
+    <div class="container">
+        <!-- Barra Navegação -->
+        <header class="navbar">
+            <div class="nav-container">
+                <div class="logo">FastHub</div>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                
+                <nav class="nav-links" id="navLinks">
+                    <a href="#" class="nav-link" data-page="home">Serviços Disponíveis</a>
+                    <a href="#" class="nav-link" data-page="request">Solicitar Serviço</a>
+                    <a href="#" class="nav-link" data-page="myrequests">Minhas Solicitações</a>
+                    <a href="#" class="nav-link" id="btnMeuPerfil" data-page="profile">Meu Perfil</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Conteúdo -->
+        <main class="content">
+            <!-- Home Page (Serviços Disponíveis) -->
+            <section id="home" class="page active">
+                <div class="header">
+                    <h1 class="title">Serviços Disponíveis</h1>
+                    <p class="subtitle">Profissionais qualificados disponíveis em sua região para atender às suas necessidades.</p>
+                </div>
+                
+                <div class="action" style="text-align: center;">
+                    <button class="btn" id="requestServiceBtn">
+                        Solicitar um novo serviço
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid" id="servicesGrid">
+                    <!-- Serviços serão inseridos via JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Soliicitação Serviço -->
+            <section id="request" class="page">
+                <div class="header">
+                    <h1 class="title">Solicitar Serviço</h1>
+                    <p class="subtitle">Descreva o serviço que você precisa e encontre profissionais qualificados para ajudá-lo.</p>
+                </div>
+                
+                <form id="requestForm" class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Título do Serviço</label>
+                        <input type="text" id="serviceTitle" class="form-input" placeholder="Ex: Instalação de ar-condicionado" required>
+                    </div>
+                    
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select id="serviceCategory" class="form-select" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="eletrico">Elétrico</option>
+                                <option value="hidraulico">Hidráulico</option>
+                                <option value="ar-condicionado">Ar-Condicionado</option>
+                                <option value="limpeza">Limpeza</option>
+                                <option value="pintura">Pintura</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Urgência</label>
+                            <select id="serviceUrgency" class="form-select" required>
+                                <option value="">Selecione a urgência</option>
+                                <option value="high">Urgente</option>
+                                <option value="medium">Moderado</option>
+                                <option value="low">Planejado</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Descrição do Serviço</label>
+                        <textarea id="serviceDescription" class="form-input text-area" placeholder="Descreva detalhadamente o que você precisa..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Localização</label>
+                        <input type="text" id="serviceLocation" class="form-input" placeholder="Ex: Rua, Bairro, Cidade" required>
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        Solicitar Serviço
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+            </section>
+            
+            <!-- MInhas Solicitações -->
+            <section id="myrequests" class="page">
+                <div class="header">
+                    <h1 class="title">Minhas Solicitações</h1>
+                    <p class="subtitle">Acompanhe o status de suas solicitações e propostas recebidas.</p>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="active">Solicitações Ativas</div>
+                    <div class="tab" data-tab="completed">Serviços Concluídos</div>
+                </div>
+                
+                <div id="activeTab" class="tab-content active">
+                    <!-- Solicitações ativas serão inseridas via JavaScript -->
+                </div>
+                
+                <div id="completedTab" class="tab-content">
+                    <!-- Serviços concluídos serão inseridos via JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Perfil -->
+            <section id="profile" class="page">
+                <div class="header">
+                    <h1 class="title">Meu Perfil</h1>
+                    <p class="subtitle">Mantenha suas informações atualizadas para uma melhor experiência.</p>
+                </div>
+                
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <div id="profileImage">R</div>
+                        <label class="avatar-upload">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            <input type="file" id="avatarInput" style="display: none;" accept="image/*">
+                        </label>
+                    </div>
+                    <h3 class="profile-name" id="profileNameDisplay">Rafael Souza</h3>
+                    <div class="profile-details">
+                        <span id="profileEmailDisplay">rafael.souza@email.com</span>
+                        <span id="profilePhoneDisplay">(11) 99876-5432</span>
+                    </div>
+                </div>
+                
+                <form id="profileForm" class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" id="profileName" class="form-input" value="Rafael Souza">
+                    </div>
+                    
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" id="profileEmail" class="form-input" value="rafael.souza@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" id="profilePhone" class="form-input" value="(11) 99876-5432">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" id="profileAddress" class="form-input" value="Rua das Flores, 123 - São Paulo, SP">
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        Salvar Alterações
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                    </button>
+                </form>
+            </section>
+        </main>
+
+        <!-- Contato do Prestador -->
+        <div class="modal-overlay" id="contactModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Contato do Prestador</h3>
+                    <button class="modal-close" id="contactModalClose">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Prestador</label>
+                        <p id="providerName" class="form-input" style="background-color: #f9fafb;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone para Contato</label>
+                        <p id="providerPhone" class="form-input" style="background-color: #f9fafb;"></p>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">Agora você pode entrar em contato diretamente com o prestador para combinar os detalhes do serviço.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="copyPhoneBtn">
+                        Copiar Telefone
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avaliação -->
+        <div class="modal-overlay" id="ratingModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Avaliar Serviço</h3>
+                    <button class="modal-close" id="ratingModalClose">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Sua avaliação</label>
+                        <div class="rating" id="ratingStars">
+                            <span class="rating-star" data-rating="1">★</span>
+                            <span class="rating-star" data-rating="2">★</span>
+                            <span class="rating-star" data-rating="3">★</span>
+                            <span class="rating-star" data-rating="4">★</span>
+                            <span class="rating-star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Comentário (opcional)</label>
+                        <textarea id="ratingComment" class="form-input text-area" placeholder="Compartilhe sua experiência com este serviço..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="submitRatingBtn">
+                        Enviar Avaliação
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer">
+            <!-- Toasts will be added here dynamically -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="copyright">&copy; 2024 FastHub. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+    
+    <script>
+
+        // Variáveis globais
+let selectedServiceId = null;
+let selectedProposalId = null;
+let currentRating = 0;
+
+// Elementos DOM
+const toastContainer = document.getElementById('toastContainer');
+const contactModal = document.getElementById('contactModal');
+const ratingModal = document.getElementById('ratingModal');
+const providerName = document.getElementById('providerName');
+const providerPhone = document.getElementById('providerPhone');
+const ratingStars = document.getElementById('ratingStars');
+
+// Função para buscar dados do usuário pelo email
+async function fetchUserData() {
+    try {
+        const userEmail = localStorage.getItem('username');
+        if (!userEmail) {
+            console.error('Nenhum usuário logado encontrado');
+            return null;
+        }
+
+        const response = await fetch(`http://168.231.92.116:8081/usuario?email=${userEmail}`);
+        if (!response.ok) throw new Error('Erro ao buscar usuário');
+        
+        const userData = await response.json();
+        return userData;
+    } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+        return null;
+    }
+}
+
+// Função para carregar dados do perfil
+async function loadProfileData() {
+    const userData = await fetchUserData();
+    if (!userData) return;
+
+    try {
+        const response = await fetch(`http://168.231.92.116:8081/cliente/meuperfil/${userData.id}`);
+        if (!response.ok) throw new Error('Erro ao buscar perfil');
+        
+        const profileData = await response.json();
+        
+        // Preencher o formulário com os dados
+        document.getElementById('profileName').value = profileData.nome || '';
+        document.getElementById('profileEmail').value = profileData.email || '';
+        document.getElementById('profilePhone').value = profileData.telefone || '';
+        
+        // Atualizar as informações exibidas
+        document.getElementById('profileNameDisplay').textContent = profileData.nome || '';
+        document.getElementById('profileEmailDisplay').textContent = profileData.email || '';
+        document.getElementById('profilePhoneDisplay').textContent = profileData.telefone || '';
+        document.getElementById('profileImage').textContent = (profileData.nome || '').charAt(0);
+        
+    } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
+        showToast('Erro', 'Não foi possível carregar os dados do perfil', 'error');
+    }
+}
+
+// Função para gerar os cards de serviços disponíveis
+function generateServiceCards() {
+    const grid = document.getElementById('servicesGrid');
+    grid.innerHTML = '';
+    
+    availableServices.forEach((service, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.innerHTML = `
+            <div class="service-category category-${service.category}">${service.categoryName}</div>
+            <div class="card-content">
+                <h3 class="card-title">${service.name}</h3>
+                <div class="card-meta">
+                    <div>
+                        <span style="color: #f59e0b;">★</span> ${service.rating.toFixed(1)}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        grid.appendChild(card);
+    });
+}
+
+// Função para gerar as solicitações ativas
+function generateActiveRequests() {
+    const activeTab = document.getElementById('activeTab');
+    activeTab.innerHTML = '';
+    
+    const activeRequests = userRequests.filter(request => request.status === 'active');
+    
+    if (activeRequests.length === 0) {
+        activeTab.innerHTML = '<p class="text-center text-gray-500 my-8">Você não tem solicitações ativas no momento.</p>';
+        return;
+    }
+    
+    activeRequests.forEach(request => {
+        const requestCard = document.createElement('div');
+        requestCard.className = 'card mb-6';
+        
+        let proposalsHtml = '';
+        if (request.proposals.length > 0) {
+            proposalsHtml = `
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <h4 class="text-lg font-medium mb-3">Propostas Recebidas (${request.proposals.length})</h4>
+                    <div class="space-y-4">
+                        ${request.proposals.map(proposal => `
+                            <div class="proposal-card">
+                                <div class="proposal-provider">
+                                    <div class="provider-icon">${proposal.providerName.charAt(0)}</div>
+                                    <span>${proposal.providerName}</span>
+                                </div>
+                                <div class="proposal-price">R$ ${proposal.price}</div>
+                                <p class="proposal-message">${proposal.message}</p>
+                                <div class="proposal-actions">
+                                    <button class="btn btn-sm btn-success accept-proposal-btn" data-request-id="${request.id}" data-proposal-id="${proposal.id}">
+                                        Aceitar Proposta
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        } else {
+            proposalsHtml = '<p class="mt-4 pt-4 border-t border-gray-100 text-gray-500">Ainda não há propostas para esta solicitação.</p>';
+        }
+        
+        requestCard.innerHTML = `
+            <div class="service-category category-${request.category}">${request.categoryName}</div>
+            <div class="card-content">
+                <h3 class="card-title">${request.title}</h3>
+                <p class="card-description">${request.description}</p>
+                <div class="card-meta border-t border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        ${request.location}
+                    </div>
+                    <div class="urgency-${request.urgency}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        ${request.urgencyLabel}
+                    </div>
+                </div>
+                ${proposalsHtml}
+            </div>
+        `;
+        
+        activeTab.appendChild(requestCard);
+    });
+    
+    // Adiciona event listeners para os botões de aceitar proposta
+    document.querySelectorAll('.accept-proposal-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const requestId = parseInt(this.getAttribute('data-request-id'));
+            const proposalId = parseInt(this.getAttribute('data-proposal-id'));
+            acceptProposal(requestId, proposalId);
+        });
+    });
+}
+
+// Função para gerar os serviços concluídos
+function generateCompletedRequests() {
+    const completedTab = document.getElementById('completedTab');
+    completedTab.innerHTML = '';
+    
+    const completedRequests = userRequests.filter(request => request.status === 'completed');
+    
+    if (completedRequests.length === 0) {
+        completedTab.innerHTML = '<p class="text-center text-gray-500 my-8">Você não tem serviços concluídos ainda.</p>';
+        return;
+    }
+    
+    completedRequests.forEach(request => {
+        const requestCard = document.createElement('div');
+        requestCard.className = 'card mb-6';
+        
+        let ratingHtml = '';
+        if (request.rating) {
+            const stars = '★'.repeat(request.rating) + '☆'.repeat(5 - request.rating);
+            ratingHtml = `
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <h4 class="text-lg font-medium mb-2">Sua avaliação</h4>
+                    <div class="flex justify-between items-center">
+                        <div style="color: #f59e0b; font-size: 1.25rem;">${stars}</div>
+                        <button class="btn btn-sm btn-outline view-contact-btn" data-request-id="${request.id}">
+                            Ver Contato
+                        </button>
+                    </div>
+                    ${request.comment ? `<p class="mt-2 text-gray-600">"${request.comment}"</p>` : ''}
+                </div>
+            `;
+        } else {
+            ratingHtml = `
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex justify-between items-center">
+                        <button class="btn btn-sm rate-service-btn" data-request-id="${request.id}">
+                            Avaliar Serviço
+                        </button>
+                        <button class="btn btn-sm btn-outline view-contact-btn" data-request-id="${request.id}">
+                            Ver Contato
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        requestCard.innerHTML = `
+            <div class="service-category category-${request.category}">${request.categoryName}</div>
+            <div class="card-content">
+                <h3 class="card-title">${request.title}</h3>
+                <p class="card-description">${request.description}</p>
+                <div class="card-meta border-t border-gray-100">
+                    <div>Concluído em: ${request.date}</div>
+                    <div>Prestador: ${request.provider.name}</div>
+                </div>
+                ${ratingHtml}
+            </div>
+        `;
+        
+        completedTab.appendChild(requestCard);
+    });
+    
+    // Adiciona event listeners para os botões
+    document.querySelectorAll('.rate-service-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const requestId = parseInt(this.getAttribute('data-request-id'));
+            openRatingModal(requestId);
+        });
+    });
+    
+    document.querySelectorAll('.view-contact-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const requestId = parseInt(this.getAttribute('data-request-id'));
+            openContactModal(requestId);
+        });
+    });
+}
+
+// Função para aceitar uma proposta
+function acceptProposal(requestId, proposalId) {
+    const requestIndex = userRequests.findIndex(req => req.id === requestId);
+    if (requestIndex === -1) return;
+    
+    const proposalIndex = userRequests[requestIndex].proposals.findIndex(prop => prop.id === proposalId);
+    if (proposalIndex === -1) return;
+    
+    const proposal = userRequests[requestIndex].proposals[proposalIndex];
+    
+    // Atualiza o status da solicitação para concluído
+    userRequests[requestIndex].status = 'completed';
+    userRequests[requestIndex].provider = {
+        id: proposal.providerId,
+        name: proposal.providerName,
+        phone: proposal.phone
+    };
+    
+    // Remove as propostas já que uma foi aceita
+    delete userRequests[requestIndex].proposals;
+    
+    showToast('Proposta aceita!', `Você aceitou a proposta de ${proposal.providerName}. Agora você pode entrar em contato diretamente.`);
+    
+    // Atualiza as listas
+    generateActiveRequests();
+    generateCompletedRequests();
+    
+    // Abre o modal de contato automaticamente
+    openContactModal(requestId);
+}
+
+// Função para abrir o modal de contato
+function openContactModal(requestId) {
+    const request = userRequests.find(req => req.id === requestId);
+    if (!request || !request.provider) return;
+    
+    providerName.textContent = request.provider.name;
+    providerPhone.textContent = request.provider.phone;
+    
+    contactModal.classList.add('active');
+}
+
+// Função para abrir o modal de avaliação
+function openRatingModal(requestId) {
+    selectedServiceId = requestId;
+    currentRating = 0;
+    
+    // Limpa as estrelas ativas
+    document.querySelectorAll('.rating-star').forEach(star => {
+        star.classList.remove('active');
+    });
+    
+    document.getElementById('ratingComment').value = '';
+    
+    ratingModal.classList.add('active');
+}
+
+// Função para enviar avaliação
+function submitRating() {
+    if (currentRating === 0) {
+        showToast('Erro', 'Por favor, selecione uma classificação.', 'error');
+        return;
+    }
+    
+    const requestIndex = userRequests.findIndex(req => req.id === selectedServiceId);
+    if (requestIndex === -1) return;
+    
+    userRequests[requestIndex].rating = currentRating;
+    userRequests[requestIndex].comment = document.getElementById('ratingComment').value;
+    
+    showToast('Avaliação enviada', 'Obrigado por avaliar o serviço!');
+    
+    ratingModal.classList.remove('active');
+    generateCompletedRequests();
+}
+
+// Função para mostrar toast notification
+function showToast(title, message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    
+    if (type === 'error') {
+        toast.style.borderColor = '#ef4444';
+    }
+    
+    toast.innerHTML = `
+        <div class="toast-icon" style="${type === 'error' ? 'color: #ef4444;' : ''}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                ${type === 'success' ? 
+                    '<polyline points="20 6 9 17 4 12"></polyline>' : 
+                    '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'}
+            </svg>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Adiciona a animação após um pequeno delay
+    setTimeout(() => {
+        toast.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Remove o toast após 4 segundos
+    setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 4000);
+}
+
+// Função para lidar com o envio do formulário de solicitação
+function handleRequestSubmit(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('serviceTitle').value;
+    const category = document.getElementById('serviceCategory').value;
+    const categoryName = document.getElementById('serviceCategory').options[document.getElementById('serviceCategory').selectedIndex].text;
+    const urgency = document.getElementById('serviceUrgency').value;
+    const urgencyLabel = document.getElementById('serviceUrgency').options[document.getElementById('serviceUrgency').selectedIndex].text;
+    const description = document.getElementById('serviceDescription').value;
+    const location = document.getElementById('serviceLocation').value;
+    
+    // Cria a nova solicitação
+    const newRequest = {
+        id: Date.now(),
+        title,
+        category,
+        categoryName,
+        description,
+        urgency,
+        urgencyLabel,
+        status: 'active',
+        location,
+        date: new Date().toLocaleDateString(),
+        proposals: []
+    };
+    
+    // Adiciona à lista
+    userRequests.unshift(newRequest);
+    
+    // Limpa o formulário
+    document.getElementById('requestForm').reset();
+    
+    showToast('Solicitação enviada', 'Sua solicitação foi enviada com sucesso! Em breve você receberá propostas.');
+    
+    // Navega para a página de solicitações
+    navigateTo('myrequests');
+    
+    // Atualiza as listas
+    generateActiveRequests();
+}
+
+// Função para lidar com o envio do formulário de perfil
+function handleProfileSubmit(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('profileName').value;
+    const email = document.getElementById('profileEmail').value;
+    const phone = document.getElementById('profilePhone').value;
+    
+    // Atualiza as informações exibidas
+    document.getElementById('profileNameDisplay').textContent = name;
+    document.getElementById('profileEmailDisplay').textContent = email;
+    document.getElementById('profilePhoneDisplay').textContent = phone;
+    document.getElementById('profileImage').textContent = name.charAt(0);
+    
+    showToast('Perfil atualizado', 'Suas informações foram atualizadas com sucesso!');
+}
+
+// Navegação entre páginas
+function navigateTo(pageId) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    document.getElementById(pageId).classList.add('active');
+    
+    // Fecha o menu mobile se estiver aberto
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+    }
+}
+
+// Navegação entre tabs
+function setupTabs() {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Desativa todas as tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Ativa a tab selecionada
+            this.classList.add('active');
+            document.getElementById(`${tabId}Tab`).classList.add('active');
+        });
+    });
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    // Gera os cards e listas iniciais
+    generateServiceCards();
+    generateActiveRequests();
+    generateCompletedRequests();
+    
+    // Setup de navegação e tabs
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            navigateTo(page);
+            
+            // Carrega os dados do perfil se for a página de perfil
+            if (page === 'profile') {
+                loadProfileData();
+            }
+        });
+    });
+    
+    setupTabs();
+    
+    // Event listeners para o botão de toggle do menu
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        document.getElementById('navLinks').classList.toggle('active');
+    });
+    
+    // Event listener para o botão de requisitar serviço
+    document.getElementById('requestServiceBtn').addEventListener('click', function() {
+        navigateTo('request');
+    });
+    
+    // Event listeners para os modais
+    document.getElementById('contactModalClose').addEventListener('click', function() {
+        contactModal.classList.remove('active');
+    });
+    
+    document.getElementById('ratingModalClose').addEventListener('click', function() {
+        ratingModal.classList.remove('active');
+    });
+    
+    // Event listener para copiar telefone
+    document.getElementById('copyPhoneBtn').addEventListener('click', function() {
+        const phone = document.getElementById('providerPhone').textContent;
+        navigator.clipboard.writeText(phone).then(() => {
+            showToast('Telefone copiado', 'O número de telefone foi copiado para a área de transferência.');
+        });
+    });
+    
+    // Event listeners para o sistema de classificação
+    document.querySelectorAll('.rating-star').forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            currentRating = rating;
+            
+            // Limpa todas as estrelas
+            document.querySelectorAll('.rating-star').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            // Ativa as estrelas até a classificação selecionada
+            document.querySelectorAll(`.rating-star[data-rating]`).forEach(s => {
+                if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('active');
+                }
+            });
+        });
+    </script>
+     <script src="../util/funcoesImportantes.js"></script>
+     <script src="../util/api/apiGETMeuPerfil_ADM.js"></script>
+</body>
+</html>
+

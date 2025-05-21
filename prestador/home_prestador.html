@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastHub</title>
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="container">
+        <!-- Barra Navegação -->
+        <header class="navbar">
+            <div class="nav-container">
+                <div class="logo">FastHub</div>
+                
+                <button class="menu-toggle" id="menuToggle" onclick="abreMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                
+                <nav class="nav-links" id="navLinks">
+                    <a href="#" class="nav-link" data-page="home">Serviços</a>
+                    <a href="#" class="nav-link" data-page="profile" id="btnMeuPerfil">Editar perfil</a>
+                    <a href="#" class="nav-link" style="display: none;" data-page="hubcash">Comprar HubCash</a>
+                    <a href="#" class="nav-link" data-page="history" onclick="carregarHistorico()" id="btnHistorico">Histórico de serviços</a>
+                    <a href ="#" class="nav-link" onclick="sair()">Sair</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Conteúdo -->
+        <main class="content">
+            <!-- Home Page (Serviços) -->
+            <section id="home" class="page active">
+                <div class="header">
+                    <h1 class="title">Serviços Disponíveis</h1>
+                    <p class="subtitle">Encontre oportunidades de serviço em sua região e conecte-se com clientes que precisam de sua expertise.</p>
+                </div>
+                
+                <div class="grid" id="serviceGrid">
+                    <!-- Cards will be inserted by JS -->
+                </div>
+            </section>
+            
+            <!-- Profile Page -->
+            <section id="profile" class="page">
+                <div class="header">
+                    <h1 class="title">Editar Perfil</h1>
+                    <p class="subtitle">Atualize suas informações pessoais e profissionais para melhorar sua visibilidade.</p>
+                </div>
+                
+                <form class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" class="form-input" value="" id="profileName" placeholder="">
+                    </div>
+                    
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" class="form-input" value="" id="profileEmail" placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" class="form-input" value="" id="profilePhone" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Especialidade</label>
+                        <input type="text" class="form-input" value="" id="profileSpecialty" placeholder="Suas áreas de especialidade">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Área de Atuação</label>
+                        <input type="text" class="form-input" value="" id="profileSpecialty" placeholder="Área de atuação">
+                    </div>
+
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" id="profileAddress" class="form-input" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número</label>
+                            <input type="text" id="profileNumber" class="form-input" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">CEP</label>
+                            <input type="text" id="profileCEP" class="form-input" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estado</label>
+                            <input type="text" id="profileState" class="form-input" value="">
+                    </div>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        Salvar Alterações
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                    </button>
+                </form>
+            </section>
+
+            
+            
+            <!-- HubCash -->
+            <section id="hubcash" style="display: none;" class="page">
+                <div class="header">
+                    <h1 class="title">Comprar HubCash</h1>
+                    <p class="subtitle">Adquira créditos para destacar seu perfil e aumentar suas chances de conseguir serviços.</p>
+                </div>
+                
+                <div class="grid">
+                    <div class="card package">
+                        <div class="package-header">
+                            <div class="package-price">R$ 50</div>
+                            <div class="package-name">Pacote Básico</div>
+                        </div>
+                        <div class="package-body">
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    500 HubCash
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Destaque por 7 dias
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    5 propostas prioritárias
+                                </li>
+                            </ul>
+                            <button class="btn">Comprar Agora</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card package" style="position: relative;">
+                        <div class="popular-badge">POPULAR</div>
+                        <div class="package-header">
+                            <div class="package-price">R$ 100</div>
+                            <div class="package-name">Pacote Pro</div>
+                        </div>
+                        <div class="package-body">
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    1200 HubCash
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Destaque por 15 dias
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    15 propostas prioritárias
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Selo de perfil verificado
+                                </li>
+                            </ul>
+                            <button class="btn">Comprar Agora</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card package">
+                        <div class="package-header">
+                            <div class="package-price">R$ 200</div>
+                            <div class="package-name">Pacote Premium</div>
+                        </div>
+                        <div class="package-body">
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    3000 HubCash
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Destaque por 30 dias
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Propostas prioritárias ilimitadas
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Selo de perfil verificado
+                                </li>
+                                <li class="feature-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Suporte prioritário
+                                </li>
+                            </ul>
+                            <button class="btn">Comprar Agora</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Histórico-->
+            <section id="history" class="page">
+                <div class="header">
+                  <h1 class="title">Histórico de Serviços</h1>
+                  <p class="subtitle">Acompanhe todos os serviços que você realizou ou está em andamento.</p>
+                </div>
+              
+                <div id="historico-container" class="container mt-4"></div>
+
+                  <!-- Os cards serão inseridos aqui -->
+                </div>
+              </section>
+              
+        </main>
+
+        <!-- Modal de Proposta -->
+        <div class="modal-overlay" id="proposalModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Enviar Proposta</h3>
+                    <button class="modal-close" id="modalClose">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-service-title" id="serviceTitle"></h4>
+                    <p class="modal-service-desc" id="serviceDescription"></p>
+                    
+                    <form class="modal-form" id="proposalForm">
+                        <div class="form-group">
+                            <label class="form-label">Valor da Proposta (R$)</label>
+                            <div class="input-icon-wrapper">
+                                <div class="input-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" id="proposalPrice" class="form-input input-with-icon" placeholder="0,00" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Seu telefone para contato</label>
+                            <input type="tel" id="proposalPhone" class="form-input" placeholder="(00) 00000-0000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Mensagem para o cliente</label>
+                            <textarea id="proposalMessage" class="form-input text-area" placeholder="Descreva brevemente como você planeja realizar o serviço..." required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="submitProposal">Enviar Proposta</button>
+                    <input type="hidden" id="solicitacaoIdParaProposta">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tost Container -->
+        <div class="toast-container" id="toastContainer">
+            <!-- Toasts will be added here dynamically -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="copyright">&copy; 2024 FastHub. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+   <script src="script.js"></script>
+   <script src="../util/funcoesImportantes.js"></script>
+   <script src="../util/api/apiGETMeuPerfil_Prestador.js"></script>
+   <script src="../util/api/apiGETHistoricoPrestador.js"></script>
+</body>
+</html>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        const userId = localStorage.getItem('id');
+        if (!userId) return;
+    
+        fetch(`http://168.231.92.116:8081/administracao/meuperfil/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const section = document.querySelector('#profile');
+                if (!section) return;
+    
+                // Preenche cada input com base no atributo name
+                section.querySelector('[name="nomeCompleto"]').value = `${data.nome} ${data.sobrenome}`;
+                section.querySelector('[name="email"]').value = data.email || '';
+                section.querySelector('[name="telefone"]').value = data.telefone || '';
+                section.querySelector('[name="cep"]').value = data.cep || '';
+                section.querySelector('[name="rua"]').value = data.rua || '';
+                section.querySelector('[name="estado"]').value = data.estado || '';
+            })
+            .catch(error => {
+                console.error('Erro ao carregar perfil:', error);
+            });
+    });
+    </script>

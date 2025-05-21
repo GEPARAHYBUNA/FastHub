@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Perfil de Usuários</title>
+    <link rel="stylesheet" href="../perfis_usuario/style.css">
+    <link rel="icon" type="image/png" href="../../imagens/logo.png">  
+
+    <script src="../../util/funcoesImportantes.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciar Perfil de Usuários</h1>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar usuário...">
+            <button>Pesquisar</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Último Acesso</th>
+                    <th>Permissões</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+            </tbody>
+        </table>
+
+        <button class="voltar" onclick="window.location.href='../home_adm.html'">Voltar</button>
+    </div>
+    <script src="../util/funcoesImportantes.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const url = "http://168.231.92.116:8081/autenticacao/api/listaUsuario";
+            const tbody = document.getElementById("userTableBody");
+        
+            fetch(url)
+                .then(response => response.json())
+                .then(users => {
+                    tbody.innerHTML = ""; // Limpa o conteúdo anterior
+        
+                    users.forEach(user => {
+                        const tr = document.createElement("tr");
+        
+                        // Define classe de status
+                        let statusClass = "";
+                        if (user.statusEnum === "ATIVO") statusClass = "ativo";
+                        else if (user.statusEnum === "SUSPENSO") statusClass = "suspenso";
+                        else statusClass = "desconhecido";
+        
+                        // Simula um último acesso
+                        const ultimoAcesso = new Date().toLocaleString("pt-BR");
+        
+                        // Cria options do select de permissões
+                        const permissoes = `
+                            <select ${user.statusEnum !== 'ATIVO' ? "disabled" : ""}>
+                                <option ${user.role === "CLIENTE" ? "selected" : ""}>Usuário</option>
+                                <option ${user.role === "ADMIN" ? "selected" : ""}>Administrador</option>
+                                <option ${user.role === "PRESTADOR" ? "selected" : ""}>Moderador</option>
+                            </select>
+                        `;
+        
+                        // Botões de ação com data-id para referência
+                        let acoes = "";
+                        if (user.statusEnum === "ATIVO") {
+                            acoes = `
+                            
+                                <button class="banir" data-id="${user.id}">Banir</button>
+                            `;
+                        } else {
+                            acoes = `
+                                <button class="banir" data-id="${user.id}">Banir</button>
+                            `;
+                        }
+        
+                        tr.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.nome} ${user.sobrenome}</td>
+                            <td class="${statusClass}">${user.statusEnum}</td>
+                            <td>${ultimoAcesso}</td>
+                            <td>${permissoes}</td>
+                            <td>${acoes}</td>
+                        `;
+        
+                        tbody.appendChild(tr);
+
+                        // Botão de banir
+                        tr.querySelectorAll(".banir").forEach(btn => {
+                            btn.addEventListener("click", function () {
+                                const userId = this.getAttribute("data-id");
+                                fetch(`http://168.231.92.116:8081/administracao/usuario/banir/${userId}`, {
+                                    method: "DELETE"
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        console.log("Usuário banido com sucesso!");
+                                        location.reload();
+                                    } else {
+                                        console.log("Falha ao banir usuário.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Erro ao banir usuário:", error);
+                                    console.log("Erro ao tentar banir usuário.");
+                                });
+                            });
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar usuários:", error);
+                });
+        });
+    </script>
+</body>
+</html>
