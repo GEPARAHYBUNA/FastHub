@@ -61,34 +61,60 @@
                         <input type="text" class="form-input" value="" id="profileName" placeholder="">
                     </div>
                     
-                    <div class="form-group">
-                        <label class="form-label">E-mail</label>
-                        <input type="email" class="form-input" value="" id="profileEmail" placeholder="seu@email.com">
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" class="form-input" value="" id="profileEmail" placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" class="form-input" value="" id="profilePhone" placeholder="(00) 00000-0000">
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Telefone</label>
-                        <input type="tel" class="form-input" value="" id="profilePhone" placeholder="(00) 00000-0000">
-                    </div>
-                    
-                    <div class="form-group" style="display: none;">
                         <label class="form-label">Especialidade</label>
-                        <input type="text" class="form-input" value="" id="" placeholder="Suas áreas de especialidade">
+                        <input type="text" class="form-input" value="" id="profileSpecialty" placeholder="Suas áreas de especialidade">
                     </div>
-                    
-                    <div class="form-group" style="display: none;">
-                        <label class="form-label">Biografia</label>
-                        <textarea class="form-input text-area" placeholder="Conte um pouco sobre sua experiência profissional">Técnico em elétrica e hidráulica com mais de 8 anos de experiência. Especializado em instalações residenciais e pequenos reparos comerciais.</textarea>
-                    </div>
-                    
+
                     <div class="form-group">
-                        <label class="form-label">Estado</label>
-                        <input type="text" name="estado" class="form-input" placeholder="Estado">
+                        <label class="form-label">Área de Atuação</label>
+                        <input type="text" class="form-input" value="" id="profileSpecialty" placeholder="Área de atuação">
                     </div>
-            
-                    <button type="button" class="btn">Salvar Alterações</button>
+
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" id="profileAddress" class="form-input" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número</label>
+                            <input type="text" id="profileNumber" class="form-input" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label class="form-label">CEP</label>
+                            <input type="text" id="profileCEP" class="form-input" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estado</label>
+                            <input type="text" id="profileState" class="form-input" value="">
+                    </div>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        Salvar Alterações
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                    </button>
                 </form>
             </section>
+
             
             
             <!-- HubCash -->
