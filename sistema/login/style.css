@@ -223,8 +223,8 @@
     }
     
     .login-logo {
-        width: 100px;
-        height: 100px;
+        width: 140px;
+        height: 140px;
         margin: 0 auto 1.5rem;
         position: relative;
     }
@@ -604,3 +604,4 @@
             opacity: 0;
         }
     }
+    
