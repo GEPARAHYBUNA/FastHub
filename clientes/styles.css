@@ -262,4 +262,77 @@
             font-size: 24px;
             cursor: pointer;
           }
+
+          .carrossel {
+            position: relative;
+            width: 800px;
+            height: 400px;          /* ocupa 100% da largura do container pai */
+            max-width: 800px;     /* opcional: limita a largura máxima */
+            margin: 20px auto;    /* centralizado horizontalmente com margem vertical */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+          }
+        
+          .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+          }
+        
+          .slide {
+            min-width: 100%;
+            user-select: none;
+          }
+        
+          .slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 10px;
+          }
+        
+          /* Botões sutis */
+          .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            user-select: none;
+          }
+        
+          /* Mostrar botões quando hover no carrossel */
+          .carrossel:hover .nav {
+            opacity: 0.7;
+          }
+        
+          .nav:hover {
+            opacity: 1;
+          }
+        
+          .prev {
+            left: 10px;
+          }
+        
+          .next {
+            right: 10px;
+          }
+        
+          /* Mobile: garantir que imagens não fiquem muito altas */
+          @media (max-width: 600px) {
+            .carrossel {
+              max-width: 100%;
+            }
+          }
           
+
+        

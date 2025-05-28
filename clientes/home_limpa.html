@@ -149,7 +149,7 @@
             </button>
             
             <nav class="nav-links" id="navLinks">
-                <a href="#" class="nav-link" data-page="home">Serviços Disponíveis</a>
+                <a href="#" class="nav-link" data-page="home">Tela Inicial</a>
                 <a href="#" class="nav-link" data-page="request">Solicitar Serviço</a>
                 <a href="#" class="nav-link" data-page="myrequests" onclick="carregaAtividade()">Minhas Solicitações</a>
                 <a href="#" class="nav-link" id="btnMeuPerfil" data-page="profile">Meu Perfil</a>
@@ -157,13 +157,13 @@
             </nav>
         </div>
     </header>
-
+       
     <!-- Main Conteúdo -->
     <main class="content">
         <!-- Home Page (Serviços Disponíveis) -->
         <section id="home" class="page active">
             <div class="header">
-                <h1 class="title">Serviços Disponíveis</h1>
+                <h1 class="title">Bem-Vindo(a)</h1>
                 <p class="subtitle">Profissionais qualificados disponíveis em sua região para atender às suas necessidades.</p>
             </div>
     
@@ -176,13 +176,22 @@
                     </svg>
                 </button>
             </div>
+            <div class="carrossel">
+                <div class="slides" id="slides">
+                  <div class="slide"><img src="../imagens/banner_primeiro.gif" alt="Imagem 1"></div>
+                  <div class="slide"><img src="../imagens/banner_primeiro.png" alt="Imagem 2"></div>
+                  <div class="slide"><img src="../imagens/banner terceiro.png" alt="Imagem 3"></div>
+                </div>
+                <button class="nav prev" onclick="moverSlide(-1)" aria-label="Slide anterior">‹</button>
+                <button class="nav next" onclick="moverSlide(1)" aria-label="Próximo slide">›</button>
+            </div>
     
             <div class="grid" id="servicesGrid">
                 <!-- Serviços serão inseridos via JavaScript -->
             </div>
         </section>
-   
-  
+
+
 
         <!-- Solicitação Serviço -->
         <section id="request" class="page">
@@ -413,6 +422,15 @@
 </html>
 
 <script>
+
+let slideAtual = 0;
+  const slides = document.getElementById("slides");
+  const totalSlides = slides.children.length;
+
+  function moverSlide(direcao) {
+    slideAtual = (slideAtual + direcao + totalSlides) % totalSlides;
+    slides.style.transform = `translateX(-${slideAtual * 100}%)`;
+  }
 // Função para atualizar a interface com os dados do usuário
 function updateProfileUI() {
     if (!currentUser) return;
